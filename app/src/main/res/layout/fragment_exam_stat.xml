@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ExamStatFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+    <Button
+        android:layout_marginTop="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aggiungi esame"
+        android:textColor="@color/blue"
+        android:background="@null"
+        android:textStyle="bold"
+        android:id="@+id/addExam"
+        android:layout_gravity="center"
+        android:textSize="20sp"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="5dp"/>
+            <Button
+                android:layout_marginTop="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modifica esame"
+                android:textColor="@color/blue"
+                android:background="@null"
+                android:textStyle="bold"
+                android:id="@+id/editExam"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:visibility="gone"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_gravity="center">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ore di studio fino ad oggi: "
+        android:textSize="24dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ore:"
+        android:id="@+id/hourStudy"
+        android:textSize="24dp"/>
+</LinearLayout>
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logoutButton"
+        >
+    </ListView>
+
+    <view
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="com.example.easy_studium.PieChartView"
+        android:id="@+id/piechart"
+        />
+
+    <com.anychart.AnyChartView
+        android:id="@+id/anyChart"
+         android:layout_height="350dp"
+        android:layout_width="350dp"
+        android:layout_gravity="center">
+
+    </com.anychart.AnyChartView>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

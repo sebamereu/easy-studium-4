@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    tools:context=".ExamFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:text="ERRORE"
+                android:id="@+id/errorText"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:background="@drawable/forget"
+                android:textColor="@color/red"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:letterSpacing="0.03"
+                />
+            <EditText
+                android:id="@+id/examName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:inputType="text"
+                android:hint="Nome esame"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+            <EditText
+                android:id="@+id/examCFU"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:inputType="text"
+                android:hint="N° C.F.U. esame"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="20sp"
+                android:inputType="text"
+                android:hint="Lezioni"/>
+
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:textSize="20sp"
+                android:inputType="text"
+                android:hint="Lunedì"/>
+            <Space
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                android:id="@+id/inizioLunedi"
+                    android:layout_gravity="center"
+                    android:text="Time inizio"
+                    android:textColor="@color/black"
+                    android:textSize="10dp" />
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+                <Button
+                    android:id="@+id/fineLunedi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time fine"
+                    android:textSize="10dp"
+
+                    android:textAlignment="center"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="20sp"
+                    android:inputType="text"
+                    android:hint="Martedì"/>
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/inizioMartedi"
+
+                    android:layout_gravity="center"
+                    android:text="Time inizio"
+                    android:textColor="@color/black"
+                    android:textSize="10dp" />
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time fine"
+                    android:textSize="10dp"
+                    android:id="@+id/fineMartedi"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="20sp"
+                    android:inputType="text"
+                    android:hint="Mercoledì"/>
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/inizioMercoledi"
+
+                    android:layout_gravity="center"
+                    android:text="Time inizio"
+                    android:textColor="@color/black"
+                    android:textSize="10dp" />
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time fine"
+                    android:textSize="10dp"
+                    android:id="@+id/fineMercoledi"
+
+                    android:textAlignment="center"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="20sp"
+                    android:inputType="text"
+                    android:hint="Giovedì"/>
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/inizioGiovedi"
+
+                    android:layout_gravity="center"
+                    android:text="Time inizio"
+                    android:textColor="@color/black"
+                    android:textSize="10dp" />
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time fine"
+                    android:textSize="10dp"
+                    android:id="@+id/fineGiovedi"
+
+                    android:textAlignment="center"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="20dp"
+                    android:textSize="20sp"
+                    android:inputType="text"
+                    android:hint="Venerdì"/>
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/inizioVenerdi"
+                    android:layout_gravity="center"
+                    android:text="Time inizio"
+                    android:textColor="@color/black"
+                    android:textSize="10dp" />
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Time fine"
+                    android:textSize="10dp"
+                    android:id="@+id/fineVenerdi"
+
+                    android:textAlignment="center"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+            <Button
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:textColor="@color/blue"
+                android:background="@null"
+                android:textStyle="bold"
+                android:id="@+id/saveExamAction"
+                android:layout_gravity="center"
+                android:textSize="20sp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context= ".LoginActivity"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:textSize="35dp"
+                android:textColor="@color/grigioapp"
+                android:textStyle="bold"
+                android:letterSpacing="0.03"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ERRORE"
+                android:id="@+id/errorText"
+                android:gravity="center"
+                android:textSize="30dp"
+                android:background="@color/red"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:letterSpacing="0.03"
+
+                />
+
+
+            <EditText
+                android:id="@+id/attrUser"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:background="@drawable/forget"
+                android:hint="Username"
+                android:textColor="@color/grigioapp"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:layout_marginTop="30dp"
+                android:paddingLeft="20dp"
+                />
+
+            <EditText
+                android:id="@+id/attrPassword"
+                android:inputType="textPassword"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:background="@drawable/forget"
+                android:hint="Password"
+                android:textColor="@color/grigioapp"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="20dp"/>
+
+<!--
+            <TextView
+                android:id="@+id/signinButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Non hai un account? Registrati!"
+                android:textColor="@color/celesteapp"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:layout_marginTop="15dp"
+                />
+                -->
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
