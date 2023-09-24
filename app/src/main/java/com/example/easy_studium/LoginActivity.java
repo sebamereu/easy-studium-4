@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,13 +25,16 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
 
-    public TextView passwordText; //static public perchè serve nell'AdminActivity
+    public EditText passwordText; //static public perchè serve nell'AdminActivity
     EditText userText;
     Button loginButton;
     TextView errorText, signinButton;
     FirebaseDatabase database;
     DatabaseReference reference;
 
+    FirebaseAuth mAuth;
+// ...
+// Initialize Firebase Auth
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         signinButton = findViewById(R.id.signinButton);
 
-
-        /*se si preme la textView "iscriviti" porta alla SignupActivity */
-
+        mAuth = FirebaseAuth.getInstance();
 
         /*se si preme il button "login" porta alla LoginActivity */
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
     public Boolean validatePassword(){
         String val=passwordText.getText().toString();
         if(val.isEmpty()){
-            passwordText.setError("password non può essere vuoto");
+            passwordText.setError("password non può essere vuota");
             return false;
         }else{
             passwordText.setError(null);

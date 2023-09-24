@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "489519480948",
+    "firebase_url": "https://easy-study-4-default-rtdb.firebaseio.com",
+    "project_id": "easy-study-4",
+    "storage_bucket": "easy-study-4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489519480948:android:8706fbc35e6b56b6c29121",
+        "android_client_info": {
+          "package_name": "com.example.easy_studium"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp1VObnOPFVCm3LCFFeE7J00oR7EQOjcA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

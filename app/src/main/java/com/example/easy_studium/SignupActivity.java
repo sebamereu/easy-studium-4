@@ -1,5 +1,8 @@
 package com.example.easy_studium;
 
+import static com.example.easy_studium.EventEditFragment.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +17,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -52,6 +60,7 @@ public class SignupActivity extends AppCompatActivity {
         clearButton = findViewById(R.id.clearButton);
         errorText = findViewById(R.id.errorText);
 
+        FirebaseAuth mAuth= FirebaseAuth.getInstance();
         /*inizializzazione di una Persona*/
         persona = new Persona();
 
@@ -73,6 +82,27 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // if(checkInput()) {
+                String username, password;
+                username=String.valueOf(usernameText.getText());
+                password=String.valueOf(passwordText.getText());
+                mAuth.createUserWithEmailAndPassword(username, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "createUserWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                    Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                /*
                 database = FirebaseDatabase.getInstance();
                 reference = database.getReference("user");
                 String name = usernameText.getText().toString();
@@ -80,7 +110,7 @@ public class SignupActivity extends AppCompatActivity {
                 String citta = cittaText.getText().toString();
                 Persona persona1 = new Persona(name, password, citta);
                 reference.child(name).setValue(persona1);
-
+*/
                 Toast.makeText(SignupActivity.this,"Registrazione avvenuta con successo", Toast.LENGTH_SHORT).show();
                 //    aggiornaPersona();
 
