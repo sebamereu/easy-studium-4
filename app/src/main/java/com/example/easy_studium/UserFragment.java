@@ -42,7 +42,6 @@ public class UserFragment extends Fragment {
         userText.setText(personaRicevuta.getUsername());
         passwordText.setText(personaRicevuta.getPassowrd());
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        dataText.setText(format.format(personaRicevuta.getData().getTime()));
         cittaText.setText(personaRicevuta.getCitta());
 
 
@@ -69,18 +68,10 @@ public class UserFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        initControls();
-    }
-
-    private void initControls(){
-        /*Se si è un utente semplice non si vede il Button per la funzionalità da Admin*/
-        if (personaRicevuta.isFlagAdmin()) {
-            admin.setVisibility(View.VISIBLE);
-        }
-
-
 
     }
+
+
 
 
 
@@ -90,9 +81,6 @@ public class UserFragment extends Fragment {
   /*  private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public UserFragment() {
         // Required empty public constructor
@@ -106,7 +94,6 @@ public class UserFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment UserFragment.
      */
-    // TODO: Rename and change types and number of parameters
  /*   public static UserFragment newInstance(String param1, String param2) {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();

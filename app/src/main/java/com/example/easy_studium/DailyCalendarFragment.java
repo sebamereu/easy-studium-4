@@ -42,7 +42,7 @@ import java.util.Locale;
 public class DailyCalendarFragment extends Fragment {
 
     private Button newEventAction, previousDayAction, nextDayAction, deleteEvent, weeklyAction;
-    private TextView monthDayText, event1;
+    TextView monthDayText, event1;
     private TextView dayOfWeekTV;
     private ListView hourListView;
     LocalTime time = LocalTime.now();
@@ -84,8 +84,8 @@ public class DailyCalendarFragment extends Fragment {
         previousDayAction = (Button) view.findViewById(R.id.previousDayAction);
         nextDayAction=(Button) view.findViewById(R.id.nextDayAction);
         newEventAction= (Button) view.findViewById(R.id.newEventAction);
-        event1=view.findViewById(R.id.event1);
-        deleteEvent=view.findViewById(R.id.deleteEvent);
+        //event1=view.findViewById(R.id.event1);
+        //deleteEvent=view.findViewById(R.id.deleteEvent);
         weeklyAction=view.findViewById(R.id.weeklyAction);
 
         CalendarUtils.selectedDate = LocalDate.now();

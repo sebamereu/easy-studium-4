@@ -9,27 +9,24 @@ public class Persona implements Serializable {
 
     private String username;
     private String passowrd;
-    private Calendar data;
+    private String data;
 
 
     private boolean flagAdmin;
     private String citta;
 
 
-    public Persona(String username, String passowrd,  Calendar data, String citta, boolean flagAdmin) {
+    public Persona(String username, String passowrd, String citta) {
 
         this.username = username;
         this.passowrd = passowrd;
-        this.data = data;
-        this.citta = citta;
-        this.flagAdmin = flagAdmin;
+        this.citta = citta;;
     }
 
     public Persona(){
         this.username="";
         this.passowrd="";
-        this.citta="";
-        this.flagAdmin=false;
+        this.citta="";;
     }
 
 
@@ -49,14 +46,6 @@ public class Persona implements Serializable {
         this.username = username;
     }
 
-    public Calendar getData() {
-        return data;
-    }
-
-    public void setData(Calendar data) {
-        this.data = data;
-    }
-
 
     public String getCitta() {
         return citta;
@@ -66,17 +55,5 @@ public class Persona implements Serializable {
         this.citta = citta;
     }
 
-    public boolean isFlagAdmin() {
-        return flagAdmin;
-    }
-
-    public String isAdminString(){
-        if(this.flagAdmin) return "true";
-        else return "false";
-    }
-
-    public void setFlagAdmin(boolean flagAdmin) {
-        this.flagAdmin = flagAdmin;
-    }
 }
 

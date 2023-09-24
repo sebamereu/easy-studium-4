@@ -12,6 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -27,8 +31,10 @@ public class SignupActivity extends AppCompatActivity {
     public Persona persona;
     TextView errorText, clearButton;
     Button salvaButton, signinButton;
-    int modelvalue=20;
-    static public String PERSONA_EXTRA="com.example.LoginAdmin.Persona";
+    FirebaseDatabase database;
+    DatabaseReference reference;
+    int modelvalue = 20;
+    static public String PERSONA_EXTRA = "com.example.LoginAdmin.Persona";
     static public ArrayList<Persona> rubrica = new ArrayList<>();
 
     @Override
@@ -39,12 +45,12 @@ public class SignupActivity extends AppCompatActivity {
 
         passwordText = findViewById(R.id.attrPassword);
         passwordConfText = findViewById(R.id.attrPasswordConf);
-        usernameText=findViewById(R.id.attrUsername);
-        dataText=findViewById(R.id.attrData);
-        cittaText=findViewById(R.id.attrCitta);
-        salvaButton=findViewById(R.id.salvaButton);
-        clearButton=findViewById(R.id.clearButton);
-        errorText=findViewById(R.id.errorText);
+        usernameText = findViewById(R.id.attrUsername);
+        dataText = findViewById(R.id.attrData);
+        cittaText = findViewById(R.id.attrCitta);
+        salvaButton = findViewById(R.id.salvaButton);
+        clearButton = findViewById(R.id.clearButton);
+        errorText = findViewById(R.id.errorText);
 
         /*inizializzazione di una Persona*/
         persona = new Persona();
@@ -66,13 +72,23 @@ public class SignupActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
+                // if(checkInput()) {
+                database = FirebaseDatabase.getInstance();
+                reference = database.getReference("user");
+                String name = usernameText.getText().toString();
+                String password = passwordText.getText().toString();
+                String citta = cittaText.getText().toString();
+                Persona persona1 = new Persona(name, password, citta);
+                reference.child(name).setValue(persona1);
+
+                Toast.makeText(SignupActivity.this,"Registrazione avvenuta con successo", Toast.LENGTH_SHORT).show();
+                //    aggiornaPersona();
+
+                //intent.putExtra(PERSONA_EXTRA, persona);
+                //rubrica.add(persona);
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-               // if(checkInput()) {
-                    aggiornaPersona();
-                    intent.putExtra(PERSONA_EXTRA, persona);
-                    rubrica.add(persona);
-                    startActivity(intent);
-               // }
+                startActivity(intent);
+                // }
             }
         });
 
@@ -80,7 +96,7 @@ public class SignupActivity extends AppCompatActivity {
         dataText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     dataText.setRawInputType(InputType.TYPE_NULL);
                     new DatePickerFragment().show(
                             getSupportFragmentManager(), DatePickerFragment.TAG);
@@ -92,43 +108,40 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    protected void updateValue(int newValue){
-        this.modelvalue=newValue;
-
+    protected void updateValue(int newValue) {
+        this.modelvalue = newValue;
 
 
     }
 
 
+    private void aggiornaPersona() {
 
-    private void aggiornaPersona(){
-
-        String usernameInserito= usernameText.getText().toString();
+        String usernameInserito = usernameText.getText().toString();
         this.persona.setUsername(usernameInserito);
 
-        String passwordInserito= passwordText.getText().toString();
+        String passwordInserito = passwordText.getText().toString();
         this.persona.setPassowrd(passwordInserito);
 
-        String cittaInserito= cittaText.getText().toString();
+        String cittaInserito = cittaText.getText().toString();
         this.persona.setCitta(cittaInserito);
 
     }
 
-    public void  doPositiveClick(Calendar date){
+    public void doPositiveClick(Calendar date) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         dataText.setText(format.format(date.getTime()));
-        this.persona.setData(date);
     }
 
     /*true se è andato a buon fine, false altrimenti*/
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private boolean checkInput(){
-        int errors=0;
+    private boolean checkInput() {
+        int errors = 0;
 
-        if(dataText.getText()==null ||dataText.getText().length()==0 ) {
+        if (dataText.getText() == null || dataText.getText().length() == 0) {
             errors++;
             dataText.setError("Inserire la data");
-        }else {
+        } else {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String date = dataText.getText().toString();
             LocalDate newDate = LocalDate.parse(date, formatter);
@@ -146,7 +159,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         }
 
-        for (int i=0; i<SignupActivity.rubrica.size();i++) {
+        for (int i = 0; i < SignupActivity.rubrica.size(); i++) {
             if (usernameText.getText().toString().equals(SignupActivity.rubrica.get(i).getUsername())) {
                 errors++;
                 usernameText.setError("Username già presente");
@@ -154,46 +167,41 @@ public class SignupActivity extends AppCompatActivity {
             } else usernameText.setError(null);
         }
 
-        if(passwordText.getText()==null||!passwordConfText.getText().toString().equals(passwordText.getText().toString())) {
+        if (passwordText.getText() == null || !passwordConfText.getText().toString().equals(passwordText.getText().toString())) {
             errors++;
             passwordConfText.setError("Le due password non coincidono");
-        }
-        else passwordConfText.setError(null);
+        } else passwordConfText.setError(null);
 
-        if (passwordText.getText()==null
-                || passwordText.length()<8
+        if (passwordText.getText() == null
+                || passwordText.length() < 8
                 || !passwordText.getText().toString().matches("(.*[0-9].*)")
                 || !passwordText.getText().toString().matches("(.*[A-Z].*)")
-                || !passwordText.getText().toString().matches("^(?=.*[_.()$&@]).*$")){
+                || !passwordText.getText().toString().matches("^(?=.*[_.()$&@]).*$")) {
             errors++;
 
             passwordText.setError("La password deve essere formata" +
                     " da almeno 8 caratteri di cui" +
                     " un numero, una lettera maiuscola e un simbolo.");
-        }
-        else passwordText.setError(null);
+        } else passwordText.setError(null);
 
 
-        if(usernameText.getText() ==null||usernameText.getText().length()==0){
+        if (usernameText.getText() == null || usernameText.getText().length() == 0) {
             errors++;
             usernameText.setError("Campo vuoto");
-        }
-        else usernameText.setError(null);
+        } else usernameText.setError(null);
 
 
-        if(usernameText.getText().toString().equals("admin")){
+        if (usernameText.getText().toString().equals("admin")) {
             errors++;
             usernameText.setError("Username non valido");
-        }
-        else usernameText.setError(null);
+        } else usernameText.setError(null);
 
-        if(cittaText.getText()==null||cittaText.length()<=2) {
+        if (cittaText.getText() == null || cittaText.length() <= 2) {
             errors++;
             cittaText.setError("Inserire una città");
-        }
-        else cittaText.setError(null);
+        } else cittaText.setError(null);
 
-        switch (errors){
+        switch (errors) {
             case 0:
                 errorText.setVisibility(View.GONE);
                 errorText.setText("");
@@ -204,10 +212,10 @@ public class SignupActivity extends AppCompatActivity {
                 break;
             default:
                 errorText.setVisibility(View.VISIBLE);
-                errorText.setText("Si sono verificati "+errors+" errori");
+                errorText.setText("Si sono verificati " + errors + " errori");
                 break;
         }
 
-        return errors==0;
+        return errors == 0;
     }
 }

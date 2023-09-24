@@ -1,5 +1,6 @@
 package com.example.easy_studium;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,13 +12,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity {
 
 
-    static public TextView passwordText; //static public perchè serve nell'AdminActivity
+    public TextView passwordText; //static public perchè serve nell'AdminActivity
     EditText userText;
     Button loginButton;
     TextView errorText, signinButton;
+    FirebaseDatabase database;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,21 +45,80 @@ public class LoginActivity extends AppCompatActivity {
 
 
         /*se si preme la textView "iscriviti" porta alla SignupActivity */
-        signinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
-            }
-        });
 
-        /*se si preme il button "accedi" porta alla LoginActivity */
+
+        /*se si preme il button "login" porta alla LoginActivity */
         loginButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-               // if(checkLogin()){
+                if(!validateUsername()||!validatePassword()){
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                //}
+                    }else {
+                    checkUser();
+                }
+            }
+        });
+
+        signinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Write a message to the database
+                 startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+            }
+        });
+    }
+
+    public Boolean validateUsername(){
+        String val=userText.getText().toString();
+        if(val.isEmpty()){
+            userText.setError("username non può essere vuoto");
+            return false;
+        }else{
+            userText.setError(null);
+            return true;
+        }
+    }
+    public Boolean validatePassword(){
+        String val=passwordText.getText().toString();
+        if(val.isEmpty()){
+            passwordText.setError("password non può essere vuoto");
+            return false;
+        }else{
+            passwordText.setError(null);
+            return true;
+        }
+    }
+    public void checkUser(){
+        String username = userText.getText().toString().trim();
+        String password = passwordText.getText().toString().trim();
+        DatabaseReference reference1= FirebaseDatabase.getInstance().getReference("user");
+        Query checkUserDatabase = reference1.orderByChild("username").equalTo(username);
+        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    userText.setError(null);
+                    String passwordFromDB = snapshot.child(username).child("password").getValue(String.class);
+
+                    //assert passwordFromDB != null;
+                    if(!Objects.equals(passwordFromDB,password)){
+                        userText.setError(null);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }else {
+                        passwordText.setError("Credenziali sbagliate");
+                        passwordText.requestFocus();
+                    }
+                }else{
+                    userText.setError("User non esistente");
+                    userText.requestFocus();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
