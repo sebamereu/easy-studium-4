@@ -8,7 +8,7 @@ public class Persona implements Serializable {
 
 
     private String username;
-    private String passowrd;
+    private String password;
     private String data;
 
 
@@ -16,26 +16,26 @@ public class Persona implements Serializable {
     private String citta;
 
 
-    public Persona(String username, String passowrd, String citta) {
+    public Persona(String username, String password, String citta) {
 
         this.username = username;
-        this.passowrd = passowrd;
+        this.password = password;
         this.citta = citta;;
     }
 
     public Persona(){
         this.username="";
-        this.passowrd="";
+        this.password="";
         this.citta="";;
     }
 
 
-    public String getPassowrd() {
-        return passowrd;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassowrd(String passowrd) {
-        this.passowrd = passowrd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getUsername() {

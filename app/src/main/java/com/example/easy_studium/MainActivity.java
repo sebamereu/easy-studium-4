@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         replaceFragment(new DailyCalendarFragment());
 
+
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
 
             switch (item.getItemId()){

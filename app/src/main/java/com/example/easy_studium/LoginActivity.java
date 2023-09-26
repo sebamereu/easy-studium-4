@@ -31,12 +31,12 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
 
+
+
     public EditText passwordText; //static public perchè serve nell'AdminActivity
     EditText userText;
     Button loginButton;
     TextView errorText, signinButton;
-    FirebaseDatabase database;
-    DatabaseReference reference;
 
     FirebaseAuth mAuth;
 // ...
@@ -57,11 +57,26 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        SessionManager sessionManager;
+
+        sessionManager = new SessionManager(getApplicationContext());
+        //Firebase.setAndroidContext(this);
+
+
         /*se si preme il button "login" porta alla LoginActivity */
         loginButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
+/*
+                if (!validateUsername() | !validatePassword()){
+
+                } else {
+                    checkUser();
+                }
+
+ */
+
 
                 String username, password;
                 username=String.valueOf(userText.getText());
@@ -85,6 +100,9 @@ public class LoginActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Toast.makeText(LoginActivity.this, "Authentication successed.",
                                         Toast.LENGTH_SHORT).show();
+                                sessionManager.createLoginSession(username,password);
+
+
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -96,6 +114,8 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+
             }
         });
 
@@ -109,48 +129,64 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public Boolean validateUsername(){
-        String val=userText.getText().toString();
-        if(val.isEmpty()){
-            userText.setError("username non può essere vuoto");
+        String val = userText.getText().toString();
+        if (val.isEmpty()){
+            userText.setError("Username cannot be empty");
             return false;
-        }else{
+        } else {
             userText.setError(null);
             return true;
         }
     }
     public Boolean validatePassword(){
-        String val=passwordText.getText().toString();
-        if(val.isEmpty()){
-            passwordText.setError("password non può essere vuota");
+        String val = passwordText.getText().toString();
+        if (val.isEmpty()){
+            passwordText.setError("Password cannot be empty");
             return false;
-        }else{
+        } else {
             passwordText.setError(null);
             return true;
         }
     }
+
     public void checkUser(){
-        String username = userText.getText().toString().trim();
-        String password = passwordText.getText().toString().trim();
-        DatabaseReference reference1= FirebaseDatabase.getInstance().getReference("user");
-        Query checkUserDatabase = reference1.orderByChild("username").equalTo(username);
+        String userUsername = userText.getText().toString().trim();
+        String userPassword = passwordText.getText().toString().trim();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user");
+        Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
+
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    userText.setError(null);
-                    String passwordFromDB = snapshot.child(username).child("password").getValue(String.class);
 
-                    //assert passwordFromDB != null;
-                    if(!Objects.equals(passwordFromDB,password)){
+                if (snapshot.exists()){
+                    userText.setError(null);
+                    String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
+
+                    if (passwordFromDB.equals(userPassword)){
                         userText.setError(null);
+
+                        //Pass the data using intent
+
+                        //String nameFromDB = snapshot.child(userUsername).child("name").getValue(String.class);
+                        //String emailFromDB = snapshot.child(userUsername).child("email").getValue(String.class);
+                        String usernameFromDB = snapshot.child(userUsername).child("username").getValue(String.class);
+
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                        //intent.putExtra("name", nameFromDB);
+                        //intent.putExtra("email", emailFromDB);
+                        intent.putExtra("username", usernameFromDB);
+                        intent.putExtra("password", passwordFromDB);
+
                         startActivity(intent);
-                    }else {
-                        passwordText.setError("Credenziali sbagliate");
+                    } else {
+                        passwordText.setError("Invalid Credentials");
                         passwordText.requestFocus();
                     }
-                }else{
-                    userText.setError("User non esistente");
+                } else {
+                    userText.setError("User does not exist");
                     userText.requestFocus();
                 }
             }
@@ -164,6 +200,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /*metodi per controllare se le credenziali messe son di
     un utente già iscritto*/
+    /*
     private boolean checkLogin() {
         int errors=0;
         if(userText.getText()==null || !checkUser(userText.getText().toString(), passwordText.getText().toString())) {
@@ -177,6 +214,8 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+     */
+
     private boolean checkAdmin() {
         int errors=0;
         if (passwordText.getText().toString().equals("admin")
@@ -185,7 +224,7 @@ public class LoginActivity extends AppCompatActivity {
         return errors != 0;
     }
 
-
+/*
     private boolean checkUser(String user, String password){
         for(int i=0; i<SignupActivity.rubrica.size();i++){
             if(SignupActivity.rubrica.get(i).getUsername().equals(user) &&
@@ -197,4 +236,6 @@ public class LoginActivity extends AppCompatActivity {
         return false;
 
     }
+
+ */
 }

@@ -40,7 +40,7 @@ public class UserFragment extends Fragment {
 
         personaRicevuta= SignupActivity.rubrica.get(SignupActivity.rubrica.size()-1);
         userText.setText(personaRicevuta.getUsername());
-        passwordText.setText(personaRicevuta.getPassowrd());
+        passwordText.setText(personaRicevuta.getPassword());
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         cittaText.setText(personaRicevuta.getCitta());
 

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Person;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,8 +40,8 @@ public class SignupActivity extends AppCompatActivity {
     public Persona persona;
     TextView errorText, clearButton;
     Button salvaButton, signinButton;
-    FirebaseDatabase database;
-    DatabaseReference reference;
+    public static FirebaseDatabase database;
+    public static DatabaseReference reference;
     int modelvalue = 20;
     static public String PERSONA_EXTRA = "com.example.LoginAdmin.Persona";
     static public ArrayList<Persona> rubrica = new ArrayList<>();
@@ -82,9 +83,10 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // if(checkInput()) {
-                String username, password;
-                username=String.valueOf(usernameText.getText());
-                password=String.valueOf(passwordText.getText());
+                //String username, password;
+                //username=String.valueOf(usernameText.getText());
+                //password=String.valueOf(passwordText.getText());
+                /*
                 mAuth.createUserWithEmailAndPassword(username, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -92,6 +94,8 @@ public class SignupActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
+                                    Toast.makeText(SignupActivity.this, "Authentication successes.",
+                                            Toast.LENGTH_SHORT).show();
                                     FirebaseUser user = mAuth.getCurrentUser();
                                 } else {
                                     // If sign in fails, display a message to the user.
@@ -102,22 +106,37 @@ public class SignupActivity extends AppCompatActivity {
                             }
                         });
 
-                /*
+                 */
+
                 database = FirebaseDatabase.getInstance();
                 reference = database.getReference("user");
-                String name = usernameText.getText().toString();
+
+                String username = usernameText.getText().toString();
                 String password = passwordText.getText().toString();
                 String citta = cittaText.getText().toString();
-                Persona persona1 = new Persona(name, password, citta);
-                reference.child(name).setValue(persona1);
-*/
-                Toast.makeText(SignupActivity.this,"Registrazione avvenuta con successo", Toast.LENGTH_SHORT).show();
+
+                Persona persona = new Persona(username, password, citta);
+                reference.child(username).setValue(persona);
+
+                Toast.makeText(SignupActivity.this, "You have signup successfully!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
+
+                database = FirebaseDatabase.getInstance();
+                reference = database.getReference("user");
+                //String password = passwordText.getText().toString();
+                //String citta = cittaText.getText().toString();
+                //Persona persona1 = new Persona(password, password, citta);
+                //reference.child(password).setValue(persona1);
+
+
+
                 //    aggiornaPersona();
 
                 //intent.putExtra(PERSONA_EXTRA, persona);
                 //rubrica.add(persona);
-                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                //startActivity(intent);
                 // }
             }
         });
@@ -151,7 +170,7 @@ public class SignupActivity extends AppCompatActivity {
         this.persona.setUsername(usernameInserito);
 
         String passwordInserito = passwordText.getText().toString();
-        this.persona.setPassowrd(passwordInserito);
+        this.persona.setPassword(passwordInserito);
 
         String cittaInserito = cittaText.getText().toString();
         this.persona.setCitta(cittaInserito);

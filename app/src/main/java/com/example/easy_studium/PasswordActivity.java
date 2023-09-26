@@ -44,7 +44,7 @@ public class PasswordActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(checkOldPassword()){
                     password=nuovaPass.getText().toString();
-                    personaRicevuta.setPassowrd(password);
+                    personaRicevuta.setPassword(password);
                     startActivity(new Intent(PasswordActivity.this, UserFragment.class));
 
                 }
@@ -91,7 +91,7 @@ public class PasswordActivity extends AppCompatActivity {
 
 
 
-        if(!vecchiaPass.getText().toString().equals(personaRicevuta.getPassowrd())){
+        if(!vecchiaPass.getText().toString().equals(personaRicevuta.getPassword())){
             errors++;
             vecchiaPass.setError("Password vecchia sbagliata");
         }

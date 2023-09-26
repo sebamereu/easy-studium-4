@@ -20,8 +20,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,6 +56,8 @@ public class ExamFragment extends Fragment {
 
     private ArrayList<String> arrayList;
     private ArrayList<Exam> arrayListExam;
+
+    FirebaseDatabase database;
 
     public static int hour, minute;
 
@@ -198,6 +207,32 @@ public class ExamFragment extends Fragment {
                     Exam.arrayList1.add(e.getName());
                     Exam.listExam.add(e);
 
+                    // Ottieni l'istanza di FirebaseAuth
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
+
+                    // Ottieni l'utente attualmente autenticato
+                    FirebaseUser user = auth.getCurrentUser();
+
+                    if (user != null) {
+                        // L'utente è autenticato, quindi possiamo procedere con l'assegnazione dell'oggetto
+
+                        // Ottieni un riferimento al database
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+                        // Crea un riferimento all'utente nel database
+                        DatabaseReference userRef = database.getReference("user").child(user.getUid());
+
+                        // Crea l'oggetto da assegnare all'utente
+                         Exam exam = new Exam(examName.toString(), examCFU.toString());
+
+                        // Assegna l'oggetto all'utente nel database
+                        userRef.setValue(exam);
+                    }
+
+                    //DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user");
+                    //DatabaseReference referenceUser= reference.child();
+                    //referenceUser.child(examName).setValue(e);
+                    //referenceUser.child(e.getCfu()).setValue(examCFU.getText().toString());
 
                     replaceFragment(new DailyCalendarFragment());
                 }

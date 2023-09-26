@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
+import com.example.easy_studium.MainActivity.*;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CalendarFragment#newInstance} factory method to
@@ -91,8 +91,6 @@ public class DailyCalendarFragment extends Fragment {
         CalendarUtils.selectedDate = LocalDate.now();
 
         setDayView();
-
-
 
 
 
