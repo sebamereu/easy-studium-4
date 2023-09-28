@@ -270,16 +270,16 @@ public class EventEditFragment extends DialogFragment {
 
                                 // Assegna l'oggetto all'utente nel database
 
-                                eventRef.child(events[i].getNameEvent()).setValue(events[i]);
-/*
+                                //eventRef.child(events[i].getNameEvent()).setValue(events[i]);
+
                                 eventRef.child("NameEvent").setValue(events[i].getNameEvent());
                                 eventRef.child("DateEvent").setValue(events[i].getDate().toString());
-                                eventRef.child("Exam").setValue(events[i].getExam().toString());
+                                eventRef.child("ExamName").setValue(events[i].getExamName().toString());
                                 eventRef.child("Time").setValue(events[i].getTime().toString());
                                 eventRef.child("ExamMode:").setValue(events[i].getExamMode().toString());
                                 eventRef.child("TimePicker").setValue(events[i].getTimePicker().toString());
 
- */
+
 
 
 
