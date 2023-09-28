@@ -54,8 +54,8 @@ public class ExamFragment extends Fragment {
             eventTimeInizioGiovedi, eventTimeFineGiovedi,
             eventTimeInizioVenerdi, eventTimeFineVenerdi;
 
-    private ArrayList<String> arrayList;
-    private ArrayList<Exam> arrayListExam;
+    public static ArrayList<String> arrayList;
+    public static ArrayList<Exam> arrayListExam;
 
     FirebaseDatabase database;
 
@@ -127,10 +127,6 @@ public class ExamFragment extends Fragment {
 
 
 
-        arrayList=Exam.arrayList1;
-        arrayListExam=Exam.listExam;
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, arrayList);
-        adapterExam = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, arrayListExam);
 
 
         eventTimeInizioLunediTV.setOnClickListener(new View.OnClickListener() {
@@ -202,9 +198,9 @@ public class ExamFragment extends Fragment {
             public void onClick(View v) {
                 if (checkInput()) {
                     Exam e = new Exam(examName.getText().toString(), examCFU.getText().toString());
-                    e.setName(examName.getText().toString());
+                    e.setNameExam(examName.getText().toString());
                     e.setCfu(examCFU.getText().toString());
-                    Exam.arrayList1.add(e.getName());
+                    Exam.arrayList1.add(e.getNameExam());
                     Exam.listExam.add(e);
 
                     // Ottieni l'istanza di FirebaseAuth
@@ -221,12 +217,14 @@ public class ExamFragment extends Fragment {
 
                         // Crea un riferimento all'utente nel database
                         DatabaseReference userRef = database.getReference("user").child(user.getUid());
+                        DatabaseReference examRef = userRef.child("exam");
+
 
                         // Crea l'oggetto da assegnare all'utente
-                         Exam exam = new Exam(examName.toString(), examCFU.toString());
+                         Exam exam = new Exam(examName.getText().toString(), examCFU.getText().toString());
 
                         // Assegna l'oggetto all'utente nel database
-                        userRef.setValue(exam);
+                        examRef.child(e.getNameExam()).setValue(exam);
                     }
 
                     //DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user");

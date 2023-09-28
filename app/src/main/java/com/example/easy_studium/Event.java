@@ -1,9 +1,7 @@
 package com.example.easy_studium;
 
-import android.app.TimePickerDialog;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import androidx.annotation.RequiresApi;
@@ -11,8 +9,6 @@ import androidx.annotation.RequiresApi;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Event {
@@ -94,11 +90,12 @@ public class Event {
         return events;
     }
 
-    private String name;
+    private String nameEvent;
     private LocalDate date;
     private LocalTime time;
-    private Object exam;
+    private Object examName;
     private Object examMode;
+
 
     private TimePicker timePicker;
 
@@ -106,21 +103,22 @@ public class Event {
 
 
 
-    public Event(String name, LocalDate date, LocalTime time, Object exam, Object examMode, TimePicker timePicker) {
-        this.name = name;
+
+    public Event(String nameEvent, LocalDate date, LocalTime time, Object examName, Object examMode, TimePicker timePicker) {
+        this.nameEvent = nameEvent;
         this.date = date;
-        this.exam=exam;
+        this.examName =examName;
         this.examMode=examMode;
         this.time = time;
         this.timePicker = timePicker;
     }
 
-    public String getName() {
-        return name;
+    public String getNameEvent() {
+        return nameEvent;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameEvent(String name) {
+        this.nameEvent = name;
     }
 
     public LocalDate getDate() {
@@ -147,12 +145,12 @@ public class Event {
         this.timePicker = timePicker;
     }
 
-    public Object getExam() {
-        return exam;
+    public Object getExamName() {
+        return examName;
     }
 
-    public void setExam(Object exam) {
-        this.exam = exam;
+    public void setExamName(Object examName) {
+        this.examName = examName;
     }
 
     public Object getExamMode() {

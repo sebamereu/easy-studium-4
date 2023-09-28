@@ -19,7 +19,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,22 +102,22 @@ public class EditExamFragment extends Fragment {
 
                         if (newNameExam.getText().length() != 0) {
 
-                            if (Exam.listExam.get(i).getName().equals(spinnerExam.getSelectedItem())) {
+                            if (Exam.listExam.get(i).getNameExam().equals(spinnerExam.getSelectedItem())) {
 
                                 for (int j = 0; j < Event.eventsList.size(); j++) {
                                     Log.d("EditExamFragment", "1 " + newNameExam.getText());
 
-                                    Log.d("EditExamFragment", "2 " + Event.eventsList.get(j).getExam() + " - " + Event.eventsList.get(j).getExamMode());
-                                    Log.d("EditExamFragment", "3 " + Event.eventsList.get(j).getExam());
+                                    Log.d("EditExamFragment", "2 " + Event.eventsList.get(j).getExamName() + " - " + Event.eventsList.get(j).getExamMode());
+                                    Log.d("EditExamFragment", "3 " + Event.eventsList.get(j).getExamName());
                                     Log.d("EditExamFragment", "4 " + newNameExam.getText().toString());
 
-                                    if (Event.eventsList.get(j).getExam().equals(spinnerExam.getSelectedItem())) {
-                                        Event.eventsList.get(j).setExam(newNameExam.getText());
+                                    if (Event.eventsList.get(j).getExamName().equals(spinnerExam.getSelectedItem())) {
+                                        Event.eventsList.get(j).setExamName(newNameExam.getText());
 
-                                        Log.d("EditExamFragment", "5 " + Event.eventsList.get(j).getExam());
+                                        Log.d("EditExamFragment", "5 " + Event.eventsList.get(j).getExamName());
 
-                                        Event.eventsList.get(j).setName("" + Event.eventsList.get(j).getExam() + " - " + Event.eventsList.get(j).getExamMode());
-                                        Log.d("EditExamFragment", "6 " + Event.eventsList.get(j).getExam() + " - " + Event.eventsList.get(j).getExamMode());
+                                        Event.eventsList.get(j).setNameEvent("" + Event.eventsList.get(j).getExamName() + " - " + Event.eventsList.get(j).getExamMode());
+                                        Log.d("EditExamFragment", "6 " + Event.eventsList.get(j).getExamName() + " - " + Event.eventsList.get(j).getExamMode());
 
                                         if (j > 0) {
                                             if (Event.eventsList.get(j - 1).getDate() == Event.eventsList.get(j).getDate())
@@ -126,7 +125,7 @@ public class EditExamFragment extends Fragment {
                                             //&& Event.eventsList.get(j - 1).getTimePicker().getHour() - Event.eventsList.get(j).getTimePicker().getHour() == 1
                                             //&& Event.eventsList.get(j - 1).getTimePicker().getMinute() - Event.eventsList.get(j).getTimePicker().getMinute() == 0)
                                             {
-                                                Event.eventsList.get(j).setName("");
+                                                Event.eventsList.get(j).setNameEvent("");
                                             }
 
                                             if (Event.eventsList.get(j - 1).getDate() == Event.eventsList.get(j).getDate())
@@ -134,7 +133,7 @@ public class EditExamFragment extends Fragment {
                                             //&& Event.eventsList.get(j - 1).getTimePicker().getHour() - Event.eventsList.get(j).getTimePicker().getHour() == 0
                                             // && Event.eventsList.get(j - 1).getTimePicker().getMinute() - Event.eventsList.get(j).getTimePicker().getMinute() == 30)
                                             {
-                                                Event.eventsList.get(j).setName("");
+                                                Event.eventsList.get(j).setNameEvent("");
                                             }
                                         }
                                     }
@@ -142,7 +141,7 @@ public class EditExamFragment extends Fragment {
 
                                 arrayList.set(i, newNameExam.getText().toString());
 
-                                Exam.listExam.get(i).setName(newNameExam.getText().toString());
+                                Exam.listExam.get(i).setNameExam(newNameExam.getText().toString());
                             }
                         }
                         if (newNumCFU.getText().length() != 0) {

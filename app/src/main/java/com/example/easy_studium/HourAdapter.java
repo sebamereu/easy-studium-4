@@ -12,11 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentController;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -85,7 +80,7 @@ public class HourAdapter extends ArrayAdapter<HourEvent>
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setEvent(TextView textView, Event event)
     {
-        textView.setText(event.getName());
+        textView.setText(event.getNameEvent());
         textView.setVisibility(View.VISIBLE);
     }
 

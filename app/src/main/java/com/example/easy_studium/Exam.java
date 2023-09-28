@@ -3,28 +3,36 @@ package com.example.easy_studium;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Exam {
 
-    public static ArrayList<String> arrayList1=new ArrayList<String>();
+    public static ArrayList<String> arrayList1=new ArrayList<>();
     public static ArrayList<Exam> listExam=new ArrayList<>();
 
-    private String name;
+    private String nameExam;
     private String cfu;
 
-    public Exam(String name, String cfu){
-        this.name=name;
+    public Exam(String nameExam, String cfu){
+        this.nameExam=nameExam;
         this.cfu=cfu;
     }
-
-
-
-    public String getName() {
-        return name;
+    // Constructor that takes a Map
+    public Exam(Map<String, Object> map) {
+        this.nameExam = (String) map.get("exam");
+        // Initialize other fields...
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Exam(){}
+
+
+
+    public String getNameExam() {
+        return nameExam;
+    }
+
+    public void setNameExam(String nameExam) {
+        this.nameExam = nameExam;
     }
 
     public String getCfu() {

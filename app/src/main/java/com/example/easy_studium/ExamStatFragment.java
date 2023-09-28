@@ -1,7 +1,6 @@
 package com.example.easy_studium;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -16,21 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.charts.Pie;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -101,32 +91,49 @@ public class ExamStatFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view;
-
-
         view=inflater.inflate(R.layout.fragment_exam_stat, container, false);
 
+        items = new ArrayList<>();
+
+        //DatabaseReference userRef = database.getReference("user").child(user.getUid());
+        //DatabaseReference examRef = userRef.child("exam");
 
         addExam=view.findViewById(R.id.addExam);
         hourStudy=view.findViewById(R.id.hourStudy);
         listView=view.findViewById(R.id.list);
-        anyChartView=view.findViewById(R.id.anyChart);
+        //anyChartView=view.findViewById(R.id.anyChart);
         editExam=view.findViewById(R.id.editExam);
 
         String controllo;
-        items = new ArrayList<>();
-        for (int i = 0; i < Exam.arrayList1.size(); i++) {
-            items.add(Exam.arrayList1.get(i));
-        }
+/*
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Exam exam = ds.getValue(Exam.class);
+                    list.add(exam);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Gestisci l'errore
+            }
+        });
+
+ */
+
+        items.addAll(Exam.arrayList1);
 
         adapter = new ListViewAdapter(getActivity(), items);
         listView.setAdapter(adapter);
 
-        PieChartView piechart= view.findViewById(R.id.piechart);
+        //PieChartView piechart= view.findViewById(R.id.piechart);
 
         Float[] percent = new Float[Exam.arrayList1.size()];
         Integer[] colors = new Integer[]{0xffedf8fb, 0xffb2e2e2, 0xff66c2a4, 0xff66c2a4};
        // if (Event.eventsList.size()==0){
-            piechart.setVisibility(View.GONE);
+            //piechart.setVisibility(View.GONE);
        // }
 
         if (Event.eventsList.size()!=0) {
@@ -134,7 +141,7 @@ public class ExamStatFragment extends Fragment {
                 String esame;
                 int minuto = 0;
                 for (int i = 0; i < Event.eventsList.size(); i++) {
-                    controllo = String.valueOf(Event.eventsList.get(i).getExam());
+                    controllo = String.valueOf(Event.eventsList.get(i).getExamName());
                     Log.d("ListViewAdapter", "" + controllo + " / " + Exam.arrayList1.get(j));
                     if (controllo.equals(Exam.arrayList1.get(j)))
                         minuto+=30;
@@ -144,14 +151,10 @@ public class ExamStatFragment extends Fragment {
                 minutiInteger.add(minuto);
             }
 
-
-
-
-
             for (int j = 0; j < Exam.arrayList1.size(); j++) {
 
                 for (int i = 0; i < Event.eventsList.size(); i++) {
-                    controllo = String.valueOf(Event.eventsList.get(i).getExam());
+                    controllo = String.valueOf(Event.eventsList.get(i).getExamName());
                     if (controllo.equals(Exam.arrayList1.get(j)))
                         esami[j] = controllo;
                     esamiString.add(controllo);
@@ -159,17 +162,6 @@ public class ExamStatFragment extends Fragment {
                 Log.d("ExamStatFragment", "Minuti[" + j + "]: " + minuti[j]);
             }
         }
-        //float calcolo = (minutiTotali/minuti)+100;
-        //for (int i=0;i<percent.length;i++){percent[i] =calcolo;}
-        /*    piechart.setPercent(Arrays.asList(percent));
-        piechart.setSegmentColor(Arrays.asList(colors));
-
-        piechart.setRadius(300);
-        piechart.setStrokeColor(Color.BLACK);
-        piechart.setStrokeWidth(4);
-*/
-        //piechart.setSelectedColor(0xff0198E1);
-        //piechart.setSelectedWidth(8);
 
         for (int i=0;i<Event.eventsList.size();i++) {
             if (Event.eventsList.get(i).getDate().getDayOfYear() <Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
@@ -180,7 +172,7 @@ public class ExamStatFragment extends Fragment {
         hourStudyInt=countDayStudy/2;
         hourStudy.setText(""+hourStudyInt);
 
-        setupPieChart();
+        //setupPieChart();
 
 
         if (Exam.arrayList1.size()!=0) editExam.setVisibility(View.VISIBLE);
@@ -208,7 +200,7 @@ public class ExamStatFragment extends Fragment {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
-
+/*
     public void setupPieChart(){
         Pie pie= AnyChart.pie();
         List<DataEntry> dataEntries =new ArrayList<>();
@@ -222,6 +214,8 @@ public class ExamStatFragment extends Fragment {
         pie.data(dataEntries);
         anyChartView.setChart(pie);
     }
+
+ */
 
 
 }
