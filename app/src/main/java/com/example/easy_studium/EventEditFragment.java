@@ -27,6 +27,7 @@ import android.widget.TimePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.Time;
@@ -253,8 +254,10 @@ public class EventEditFragment extends DialogFragment {
                         // Ottieni l'utente attualmente autenticato
                         FirebaseUser user = auth.getCurrentUser();
 
+                        // Crea l'oggetto da assegnare all'utente
+                        events[i] = new Event(eventName, CalendarUtils.selectedDate, time, spinner.getSelectedItem(), spinnerToDo.getSelectedItem(), timePickers[i]);
+
                         if (i == 0) {
-                            events[i] = new Event(eventName, CalendarUtils.selectedDate, time, spinner.getSelectedItem(), spinnerToDo.getSelectedItem(), timePickers[i]);
                             if (user != null) {
                                 // L'utente è autenticato, quindi possiamo procedere con l'assegnazione dell'oggetto
 
@@ -264,20 +267,20 @@ public class EventEditFragment extends DialogFragment {
                                 // Crea un riferimento all'utente nel database
                                 DatabaseReference userRef = database.getReference("user").child(user.getUid());
                                 DatabaseReference eventsRef = userRef.child("events");
-                                DatabaseReference eventRef = eventsRef.child(events[i].getNameEvent());
-
-                                // Crea l'oggetto da assegnare all'utente
+                                DatabaseReference eventRef = eventsRef.child(events[i].getNameEvent()+
+                                        " - " + CalendarUtils.selectedDate.toString());
 
                                 // Assegna l'oggetto all'utente nel database
 
-                                //eventRef.child(events[i].getNameEvent()).setValue(events[i]);
+                                //eventsRef.child(events[i].getNameEvent()).setValue(events[i]);
 
                                 eventRef.child("NameEvent").setValue(events[i].getNameEvent());
                                 eventRef.child("DateEvent").setValue(events[i].getDate().toString());
                                 eventRef.child("ExamName").setValue(events[i].getExamName().toString());
                                 eventRef.child("Time").setValue(events[i].getTime().toString());
                                 eventRef.child("ExamMode:").setValue(events[i].getExamMode().toString());
-                                eventRef.child("TimePicker").setValue(events[i].getTimePicker().toString());
+
+ 
 
 
 
@@ -299,7 +302,6 @@ public class EventEditFragment extends DialogFragment {
                     }
 
 
-                    Log.d("EventEditFragment", "" + Event.eventsList.toString());
 
                     replaceFragment(new DailyCalendarFragment());
                 }

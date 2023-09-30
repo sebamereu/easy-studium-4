@@ -217,7 +217,7 @@ public class ExamFragment extends Fragment {
 
                         // Crea un riferimento all'utente nel database
                         DatabaseReference userRef = database.getReference("user").child(user.getUid());
-                        DatabaseReference examRef = userRef.child("exam");
+                        DatabaseReference examRef = userRef.child("exams");
 
 
                         // Crea l'oggetto da assegnare all'utente

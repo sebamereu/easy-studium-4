@@ -66,11 +66,9 @@ public class Event {
 
                     event.getTimePicker().setMinute(eventMinute);
 */
-                    Log.d("Event", "" + event.getTimePicker().getHour() + ":" + event.getTimePicker().getMinute());
 
 
                 }
-                Log.d("Event", "" + event.getTimePicker().getHour() + ":" + event.getTimePicker().getMinute());
         }
 
         return events;

@@ -21,6 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
 
@@ -69,6 +72,26 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     System.out.println("exam is null");
                                 }
+/*
+                                String nameEvent = (String) examNameSnapshot.child("NameEvent").getValue();
+                                String examMode = (String) examNameSnapshot.child("ExamMode").getValue();
+                                String examName = (String) examNameSnapshot.child("ExamName").getValue();
+                                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // adjust this to match your date format
+                                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS"); // adjust this to match your time format
+
+                                LocalDate dateEvent = LocalDate.parse((Objects.requireNonNull(examNameSnapshot.child("DateEvent").getValue()).toString()), dateFormatter);
+                                LocalTime time = LocalTime.parse((String) examNameSnapshot.child("Time").getValue(), timeFormatter);
+
+                                if (nameEvent != null) {
+                                    Event event = new Event(nameEvent, dateEvent, time,examName,examMode);
+                                    Event.eventsList.add(event);
+
+                                } else {
+                                    System.out.println("event is null");
+                                }
+
+ */
+
                             }
 
                         }
