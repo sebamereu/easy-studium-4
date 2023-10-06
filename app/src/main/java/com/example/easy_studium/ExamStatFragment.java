@@ -164,7 +164,7 @@ public class ExamStatFragment extends Fragment {
         }
 
         for (int i=0;i<Event.eventsList.size();i++) {
-            if (Event.eventsList.get(i).getDate().getDayOfYear() <Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
+            if (Event.eventsList.get(i).getDateEvent().getDayOfYear() <Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
                 countDayStudy++;
             }
         }

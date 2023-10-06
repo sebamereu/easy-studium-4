@@ -2,7 +2,6 @@ package com.example.easy_studium;
 
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,14 +25,10 @@ import android.widget.TimePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -49,6 +43,7 @@ public class EventEditFragment extends DialogFragment {
     private TextView eventDateTV, errorText, errorNullExam;
     private Button newEventAction, saveEventAction, eventTimeTV, eventTimeFinish;
     private LocalTime  time;
+    private LocalDate localDate;
     public static Spinner spinner, spinnerToDo;
     private TimePicker eventTimeInizio, eventTimeFine;
     public static int hour, minute;
@@ -121,6 +116,7 @@ public class EventEditFragment extends DialogFragment {
 
 
         time = LocalTime.now();
+        localDate = CalendarUtils.selectedDate;
         eventDateTV.setText("Date: " + CalendarUtils.formattedDate(CalendarUtils.selectedDate));
         //eventTimeTV.setText("Time: " + CalendarUtils.formattedTime(time));
 
@@ -204,7 +200,7 @@ public class EventEditFragment extends DialogFragment {
                     //String eventName = eventNameET.getText().toString();
 
                     String eventName = ("" + spinner.getSelectedItem().toString() +
-                            " - " + spinnerToDo.getSelectedItem().toString());
+                            " - " + eventTimeInizio.getId());
 
                     TimePicker timePickerInizio = eventTimeInizio;
                     TimePicker timePickerFine = eventTimeFine;
@@ -267,34 +263,26 @@ public class EventEditFragment extends DialogFragment {
                                 // Crea un riferimento all'utente nel database
                                 DatabaseReference userRef = database.getReference("user").child(user.getUid());
                                 DatabaseReference eventsRef = userRef.child("events");
-                                DatabaseReference eventRef = eventsRef.child(events[i].getNameEvent()+
-                                        " - " + CalendarUtils.selectedDate.toString());
+                                DatabaseReference eventRef = eventsRef.child(eventName);
 
                                 // Assegna l'oggetto all'utente nel database
 
                                 //eventsRef.child(events[i].getNameEvent()).setValue(events[i]);
-
-                                eventRef.child("NameEvent").setValue(events[i].getNameEvent());
-                                eventRef.child("DateEvent").setValue(events[i].getDate().toString());
-                                eventRef.child("ExamName").setValue(events[i].getExamName().toString());
-                                eventRef.child("Time").setValue(events[i].getTime().toString());
-                                eventRef.child("ExamMode:").setValue(events[i].getExamMode().toString());
-
- 
-
-
-
-
-
-
-
-                            }
+/*
+                                eventRef.child("nameEvent").setValue(eventName);
+                                eventRef.child("date").setValue(localDate.toString());
+                                eventRef.child("examName").setValue(spinner.getSelectedItem());
+                                eventRef.child("time").setValue(time);
+                                eventRef.child("examMode").setValue(spinnerToDo.getSelectedItem());
+                                eventRef.child("timePicker").setValue(timePickers[i]);
+                                 */
+                             }
                             Event.eventsList.add(events[i]);
-                        } else {
+                        } /*else {
                             events[i] = new Event("", CalendarUtils.selectedDate, time, spinner.getSelectedItem(), spinnerToDo.getSelectedItem(), timePickers[i]);
                             Event.eventsList.add(events[i]);
 
-                        }
+                        }*/
 
                         //Log.d("EventEditFragment", "" + eventInizio.getTimePicker().getHour() + ":" + eventInizio.getTimePicker().getMinute());
 

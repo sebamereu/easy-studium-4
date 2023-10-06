@@ -1,9 +1,14 @@
 package com.example.easy_studium;
 
+import static com.example.easy_studium.CalendarUtils.selectedDate;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -20,16 +25,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.Nullable;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+@RequiresApi(api = Build.VERSION_CODES.O)
 
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -39,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         replaceFragment(new DailyCalendarFragment());
-
         // Get an instance of FirebaseAuth
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -54,62 +67,31 @@ public class MainActivity extends AppCompatActivity {
 
             // Create a reference to the user in the database
             DatabaseReference reference = database.getReference("user");
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        for (DataSnapshot examSnapshot : userSnapshot.getChildren()) {
-                            for (DataSnapshot examNameSnapshot : examSnapshot.getChildren()) {
 
-                                String nameExam = (String) examNameSnapshot.child("nameExam").getValue();
-                                String cfuExam = (String) examNameSnapshot.child("cfu").getValue();
-                                if (nameExam != null) {
-                                    Exam e = new Exam(nameExam, cfuExam);
-                                    e.setNameExam(nameExam);
-                                    e.setCfu(cfuExam);
-                                    Exam.arrayList1.add(nameExam);
-                                    Exam.listExam.add(e);
-                                } else {
-                                    System.out.println("exam is null");
-                                }
-/*
-                                String nameEvent = (String) examNameSnapshot.child("NameEvent").getValue();
-                                String examMode = (String) examNameSnapshot.child("ExamMode").getValue();
-                                String examName = (String) examNameSnapshot.child("ExamName").getValue();
-                                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // adjust this to match your date format
-                                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS"); // adjust this to match your time format
-
-                                LocalDate dateEvent = LocalDate.parse((Objects.requireNonNull(examNameSnapshot.child("DateEvent").getValue()).toString()), dateFormatter);
-                                LocalTime time = LocalTime.parse((String) examNameSnapshot.child("Time").getValue(), timeFormatter);
-
-                                if (nameEvent != null) {
-                                    Event event = new Event(nameEvent, dateEvent, time,examName,examMode);
-                                    Event.eventsList.add(event);
-
-                                } else {
-                                    System.out.println("event is null");
-                                }
-
- */
-
-                            }
-
-                        }
-
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Handle error...
-                }
-            });
             ExamFragment.arrayList=Exam.arrayList1;
             ExamFragment.arrayListExam=Exam.listExam;
             ExamFragment.adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, ExamFragment.arrayList);
             ExamFragment.adapterExam = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, ExamFragment.arrayListExam);
 
+            CalendarUtils.selectedDate = LocalDate.now();
+
+            ArrayList<HourEvent> list = new ArrayList<>();
+            for(int hour = 0; hour < 24; hour++) {
+                LocalTime time = LocalTime.of(hour, 0);
+                ArrayList<Event> events = Event.eventsForDateAndTime(selectedDate, time);
+                HourEvent hourEvent = new HourEvent(time, events);
+                list.add(hourEvent);
+
+                time = LocalTime.of(hour, 30);
+                events = Event.eventsForDateAndTime(selectedDate, time);
+                hourEvent = new HourEvent(time, events);
+                list.add(hourEvent);
+
+                Log.d("DailyCalendarFragment1", ""+list.size());
+            }
+
+
+            //setDayView();
         }
 
 
@@ -140,4 +122,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
+
+
+
+
 }

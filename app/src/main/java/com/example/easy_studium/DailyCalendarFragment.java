@@ -41,10 +41,12 @@ import com.example.easy_studium.MainActivity.*;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class DailyCalendarFragment extends Fragment {
 
-    private Button newEventAction, previousDayAction, nextDayAction, deleteEvent, weeklyAction;
-    TextView monthDayText, event1;
-    private TextView dayOfWeekTV;
-    private ListView hourListView;
+    private Button  nextDayAction, deleteEvent, weeklyAction;
+    public static Button  newEventAction, previousDayAction;
+    public static TextView monthDayText;
+
+    public static TextView dayOfWeekTV;
+    public static ListView hourListView;
     LocalTime time = LocalTime.now();
 
 

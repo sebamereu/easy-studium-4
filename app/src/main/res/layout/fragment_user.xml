@@ -1,194 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".UserFragment">
 
-    <ScrollView
+
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="MissingConstraints">
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:letterSpacing="0.03"
+            android:text="Benvenuto"
+            android:textColor="@color/grigioapp"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/confUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:letterSpacing="0.03"
+            android:textColor="@color/grigioapp"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Benvenuto"
-                    android:textSize="25dp"
-                    android:textColor="@color/grigioapp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.03"
-                    android:layout_marginLeft="10dp"
-                    />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/confUser"
-                    android:textSize="25dp"
-                    android:textColor="@color/grigioapp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.03"
-                    android:layout_marginLeft="5dp"
-                    />
+    <TextView
+        android:id="@+id/modificaPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal"
+        android:text="Modifica password"
+        android:textColor="@color/celesteapp"
+        android:textSize="18dp"
+        android:textStyle="bold" />
 
-            </LinearLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button"
+        android:text="LOGOUT"
+        android:textColor="@color/celesteapp"
+        android:textSize="18dp"
+        android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Password:  "
-                    android:textSize="25dp"
-                    android:textColor="@color/grigioapp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.03"
-                    android:layout_marginLeft="10dp"
-                    />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/confPassword"
-                    android:textSize="25dp"
-                    android:textColor="@color/celesteapp"
-                    android:letterSpacing="0.03"
-                    android:layout_marginLeft="5dp"
-                    />
+    <Button
+        android:id="@+id/chatButton"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button"
+        android:text="CHAT"
+        android:textColor="@color/celesteapp"
+        android:textSize="18dp"
+        android:textStyle="bold" />
 
-            </LinearLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </androidx.recyclerview.widget.RecyclerView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Data di nascità: "
-                    android:textSize="25dp"
-                    android:textColor="@color/grigioapp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.03"
-                    android:layout_marginLeft="10dp"
-                    />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/confData"
-                    android:textSize="25dp"
-                    android:textColor="@color/celesteapp"
-                    android:letterSpacing="0.03"
-                    android:layout_marginLeft="5dp"
-                    />
-
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Città: "
-                    android:textSize="25dp"
-                    android:textColor="@color/grigioapp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.03"
-                    android:layout_marginLeft="10dp"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/confCitta"
-                    android:textSize="25dp"
-                    android:textColor="@color/celesteapp"
-                    android:letterSpacing="0.03"
-                    android:layout_marginLeft="5dp"
-                    />
-
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="25dp"/>
-
-            <TextView
-                android:gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Modifica password"
-                android:id="@+id/modificaPassword"
-                android:textColor="@color/celesteapp"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                android:layout_marginTop="15dp"/>
-
-            <Button
-                android:text="Gestisci utenti"
-                android:id="@+id/admin"
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:background="@drawable/button"
-                android:textSize="18dp"
-                android:visibility="gone"
-                android:textStyle="bold"
-                android:textColor="@color/celesteapp"
-                android:layout_marginTop="20dp"
-                />
-
-            <Button
-                android:text="LOGOUT"
-                android:id="@+id/logoutButton"
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:background="@drawable/button"
-                android:textSize="18dp"
-                android:textStyle="bold"
-                android:textColor="@color/celesteapp"
-                android:layout_marginTop="20dp"
-                />
-
-        </LinearLayout>
-    </ScrollView>
-
-</FrameLayout>
+</LinearLayout>

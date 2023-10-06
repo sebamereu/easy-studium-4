@@ -13,11 +13,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,16 +39,31 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
 
 
-
-
     public EditText passwordText; //static public perchè serve nell'AdminActivity
     EditText userText;
     Button loginButton;
     TextView errorText, signinButton;
-
+    ProgressBar progressBar;
     FirebaseAuth mAuth;
+    String email, password;
+    DatabaseReference reference;
+
+    // ...
+// Initialize Firebase Auth
 // ...
 // Initialize Firebase Auth
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+     /*   FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            Intent intent= new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }*/
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.attrPassword);
         loginButton = findViewById(R.id.loginButton);
         signinButton = findViewById(R.id.signinButton);
-
-
+        progressBar=findViewById(R.id.progressBarLogin);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -85,46 +101,48 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 String username, password;
-                username=String.valueOf(userText.getText());
-                password=String.valueOf(passwordText.getText());
+                username = String.valueOf(userText.getText());
+                password = String.valueOf(passwordText.getText());
 
-                if(TextUtils.isEmpty(username)){
+                if (TextUtils.isEmpty(username)) {
                     Toast.makeText(LoginActivity.this, "Enter email.",
                             Toast.LENGTH_SHORT).show();
                 }
 
-                if(TextUtils.isEmpty(password)){
+                if (TextUtils.isEmpty(password)) {
                     Toast.makeText(LoginActivity.this, "Enter password.",
                             Toast.LENGTH_SHORT).show();
                 }
-
+                login();
+/*
                 mAuth.signInWithEmailAndPassword(username, password)
-                    .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Toast.makeText(LoginActivity.this, "Authentication successed.",
-                                        Toast.LENGTH_SHORT).show();
-                                sessionManager.createLoginSession(username,password);
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            public void onSu
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    progressBar.setVisibility(View.GONE  );
+
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Toast.makeText(LoginActivity.this, "Authentication successed.",
+                                            Toast.LENGTH_SHORT).show();
+                                    sessionManager.createLoginSession(username, password);
 
 
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
 
 
-
-
-
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
                             }
-                            else {
-                                // If sign in fails, display a message to the user.
-                                Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                        });
+
+ */
 
 
             }
@@ -134,14 +152,29 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Write a message to the database
-                 startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
     }
 
-    public Boolean validateUsername(){
+    private void login() {
+        FirebaseAuth
+                .getInstance()
+                .signInWithEmailAndPassword(userText.getText().toString().trim()
+                        , passwordText.getText().toString())
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                        finish();
+                    }
+                });
+    }
+
+    public Boolean validateUsername() {
         String val = userText.getText().toString();
-        if (val.isEmpty()){
+        if (val.isEmpty()) {
             userText.setError("Username cannot be empty");
             return false;
         } else {
@@ -149,9 +182,10 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         }
     }
-    public Boolean validatePassword(){
+
+    public Boolean validatePassword() {
         String val = passwordText.getText().toString();
-        if (val.isEmpty()){
+        if (val.isEmpty()) {
             passwordText.setError("Password cannot be empty");
             return false;
         } else {
@@ -160,7 +194,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void checkUser(){
+    public void checkUser() {
         String userUsername = userText.getText().toString().trim();
         String userPassword = passwordText.getText().toString().trim();
 
@@ -168,14 +202,15 @@ public class LoginActivity extends AppCompatActivity {
         Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
 
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if (snapshot.exists()){
+                if (snapshot.exists()) {
                     userText.setError(null);
                     String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
 
-                    if (passwordFromDB.equals(userPassword)){
+                    if (passwordFromDB.equals(userPassword)) {
                         userText.setError(null);
 
                         //Pass the data using intent
@@ -228,9 +263,11 @@ public class LoginActivity extends AppCompatActivity {
      */
 
     private boolean checkAdmin() {
-        int errors=0;
+        int errors = 0;
         if (passwordText.getText().toString().equals("admin")
-                && userText.getText().toString().equals("admin")){errors++;}
+                && userText.getText().toString().equals("admin")) {
+            errors++;
+        }
 
         return errors != 0;
     }

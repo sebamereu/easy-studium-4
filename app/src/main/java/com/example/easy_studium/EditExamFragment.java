@@ -120,7 +120,7 @@ public class EditExamFragment extends Fragment {
                                         Log.d("EditExamFragment", "6 " + Event.eventsList.get(j).getExamName() + " - " + Event.eventsList.get(j).getExamMode());
 
                                         if (j > 0) {
-                                            if (Event.eventsList.get(j - 1).getDate() == Event.eventsList.get(j).getDate())
+                                            if (Event.eventsList.get(j - 1).getDateEvent() == Event.eventsList.get(j).getDateEvent())
                                             //&& Objects.equals(Event.eventsList.get(j - 1).getName(), Event.eventsList.get(j).getName())
                                             //&& Event.eventsList.get(j - 1).getTimePicker().getHour() - Event.eventsList.get(j).getTimePicker().getHour() == 1
                                             //&& Event.eventsList.get(j - 1).getTimePicker().getMinute() - Event.eventsList.get(j).getTimePicker().getMinute() == 0)
@@ -128,7 +128,7 @@ public class EditExamFragment extends Fragment {
                                                 Event.eventsList.get(j).setNameEvent("");
                                             }
 
-                                            if (Event.eventsList.get(j - 1).getDate() == Event.eventsList.get(j).getDate())
+                                            if (Event.eventsList.get(j - 1).getDateEvent() == Event.eventsList.get(j).getDateEvent())
                                             //&& Objects.equals(Event.eventsList.get(j - 1).getName(), Event.eventsList.get(j).getName())
                                             //&& Event.eventsList.get(j - 1).getTimePicker().getHour() - Event.eventsList.get(j).getTimePicker().getHour() == 0
                                             // && Event.eventsList.get(j - 1).getTimePicker().getMinute() - Event.eventsList.get(j).getTimePicker().getMinute() == 30)

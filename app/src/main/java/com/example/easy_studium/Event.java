@@ -1,7 +1,6 @@
 package com.example.easy_studium;
 
 import android.os.Build;
-import android.util.Log;
 import android.widget.TimePicker;
 
 import androidx.annotation.RequiresApi;
@@ -19,7 +18,7 @@ public class Event {
 
 
         for (int i=0; i<eventsList.size();i++){
-            int eventDate = eventsList.get(i).getDate().getDayOfYear();
+            int eventDate = eventsList.get(i).getDateEvent().getDayOfYear();
             int cellDate = date.getDayOfYear();
             if (eventDate==cellDate &&i==0)
                 events.add(eventsList.get(i));
@@ -42,7 +41,7 @@ public class Event {
             int cellMinute = time.getMinute();
 
 
-                if (event.getDate().equals(date) && eventHour == cellHour ) {
+                if (event.getDateEvent().equals(date) && eventHour == cellHour ) {
                         if (eventMinute < 30 && cellMinute == 0) {
                             //event.getTimePicker().setHour(i);
                             events.add(event);
@@ -81,7 +80,7 @@ public class Event {
         for (Event event : eventsList) {
             int eventHour = event.time.getHour();
             int cellHour = time.getHour();
-            if (event.getDate().equals(date) && eventHour == cellHour)
+            if (event.getDateEvent().equals(date) && eventHour == cellHour)
                 events.add(event);
         }
 
@@ -89,7 +88,7 @@ public class Event {
     }
 
     private String nameEvent;
-    private LocalDate date;
+    private LocalDate dateEvent;
     private LocalTime time;
     private Object examName;
     private Object examMode;
@@ -102,9 +101,9 @@ public class Event {
 
 
 
-    public Event(String nameEvent, LocalDate date, LocalTime time, Object examName, Object examMode, TimePicker timePicker) {
+    public Event(String nameEvent, LocalDate dateEvent, LocalTime time, Object examName, Object examMode, TimePicker timePicker) {
         this.nameEvent = nameEvent;
-        this.date = date;
+        this.dateEvent = dateEvent;
         this.examName =examName;
         this.examMode=examMode;
         this.time = time;
@@ -119,12 +118,12 @@ public class Event {
         this.nameEvent = name;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getDateEvent() {
+        return dateEvent;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDateEvent(LocalDate dateEvent) {
+        this.dateEvent = dateEvent;
     }
 
     public LocalTime getTime() {

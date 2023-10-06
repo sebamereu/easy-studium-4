@@ -48,11 +48,23 @@
                 />
 
             <EditText
-                android:id="@+id/attrUsername"
+                android:id="@+id/userName"
                 android:layout_width="300dp"
                 android:layout_height="45dp"
                 android:background="@drawable/forget"
-                android:hint="Username"
+                android:hint="username"
+                android:textColor="@color/grigioapp"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:layout_marginTop="30dp"
+                android:paddingLeft="20dp"/>
+
+            <EditText
+                android:id="@+id/userEmail"
+                android:layout_width="300dp"
+                android:layout_height="45dp"
+                android:background="@drawable/forget"
+                android:hint="Email"
                 android:textColor="@color/grigioapp"
                 android:textStyle="bold"
                 android:textSize="18dp"
@@ -61,7 +73,7 @@
 
 
             <EditText
-                android:id="@+id/attrPassword"
+                android:id="@+id/userPassword"
                 android:inputType="textPassword"
                 android:layout_width="300dp"
                 android:layout_height="45dp"
@@ -73,7 +85,7 @@
                 android:layout_marginTop="20dp"
                 android:paddingLeft="20dp"/>
 
-            <EditText
+       <!--     <EditText
                 android:id="@+id/attrPasswordConf"
                 android:inputType="textPassword"
                 android:hint="Conferma password"
@@ -110,6 +122,22 @@
                 android:textSize="18dp"
                 android:layout_marginTop="20dp"
                 android:paddingLeft="20dp" />
+-->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+           <Button
+                android:id="@+id/salvaButton"
+                android:text="Iscriviti"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:background="@drawable/button"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textColor="@color/celesteapp"
+                android:layout_marginTop="20dp" />
 
             <TextView
                 android:id="@+id/clearButton"
@@ -121,16 +149,7 @@
                 android:textSize="18dp"
                 android:layout_marginTop="15dp"/>
 
-            <Button
-                android:id="@+id/salvaButton"
-                android:text="Iscriviti"
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:background="@drawable/button"
-                android:textSize="18dp"
-                android:textStyle="bold"
-                android:textColor="@color/celesteapp"
-                android:layout_marginTop="20dp" />
+
         </LinearLayout>
 
 

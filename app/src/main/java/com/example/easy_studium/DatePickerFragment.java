@@ -36,7 +36,7 @@ public class DatePickerFragment extends DialogFragment {
                     date.set(Calendar.MONTH, datePicker.getMonth());
                     date.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
 
-                    ((SignupActivity)getActivity()).doPositiveClick(date);
+                    //((SignupActivity)getActivity()).doPositiveClick(date);
 
                 } )
                 .setNegativeButton("Annulla",

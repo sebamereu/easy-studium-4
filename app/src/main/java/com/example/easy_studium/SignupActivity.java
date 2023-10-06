@@ -1,28 +1,31 @@
 package com.example.easy_studium;
 
-import static com.example.easy_studium.EventEditFragment.TAG;
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Person;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -35,16 +38,34 @@ import java.util.Calendar;
 
 public class SignupActivity extends AppCompatActivity {
 
+    String username, password, email;
 
-    EditText usernameText, dataText, cittaText, passwordConfText, passwordText;
+    EditText usernameText, emailText, passwordText;
     public Persona persona;
     TextView errorText, clearButton;
     Button salvaButton, signinButton;
+    ProgressBar progressBar;
     public static FirebaseDatabase database;
-    public static DatabaseReference reference;
+    DatabaseReference reference;
     int modelvalue = 20;
     static public String PERSONA_EXTRA = "com.example.LoginAdmin.Persona";
     static public ArrayList<Persona> rubrica = new ArrayList<>();
+
+    FirebaseAuth mAuth= FirebaseAuth.getInstance();
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        /*FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            Intent intent= new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+         */
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,28 +73,29 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
 
-        passwordText = findViewById(R.id.attrPassword);
-        passwordConfText = findViewById(R.id.attrPasswordConf);
-        usernameText = findViewById(R.id.attrUsername);
-        dataText = findViewById(R.id.attrData);
-        cittaText = findViewById(R.id.attrCitta);
+        passwordText = findViewById(R.id.userPassword);
+        //passwordConfText = findViewById(R.id.attrPasswordConf);
+        usernameText = findViewById(R.id.userName);
+        emailText = findViewById(R.id.userEmail);
+
+        //dataText = findViewById(R.id.attrData);
+        //cittaText = findViewById(R.id.attrCitta);
         salvaButton = findViewById(R.id.salvaButton);
         clearButton = findViewById(R.id.clearButton);
         errorText = findViewById(R.id.errorText);
+        progressBar=findViewById(R.id.progressBar);
 
-        FirebaseAuth mAuth= FirebaseAuth.getInstance();
         /*inizializzazione di una Persona*/
         persona = new Persona();
+        reference=FirebaseDatabase.getInstance().getReference("users");
 
         /*Button che serve per pulire tutti i campi che son stati compilati*/
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 usernameText.getText().clear();
+                emailText.getText().clear();
                 passwordText.getText().clear();
-                passwordConfText.getText().clear();
-                dataText.getText().clear();
-                cittaText.getText().clear();
             }
         });
 
@@ -83,47 +105,59 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // if(checkInput()) {
-                //String username, password;
-                //username=String.valueOf(usernameText.getText());
-                //password=String.valueOf(passwordText.getText());
-                /*
+                progressBar.setVisibility(View.VISIBLE);
+                username=String.valueOf(usernameText.getText());
+                email=String.valueOf(emailText.getText());
+                password=String.valueOf(passwordText.getText());
+
+                if(TextUtils.isEmpty(username)){
+                    Toast.makeText(SignupActivity.this, "Enter email",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(TextUtils.isEmpty(password)){
+                    Toast.makeText(SignupActivity.this, "Enter password",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                signup();
+
+/*
                 mAuth.createUserWithEmailAndPassword(username, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+                                progressBar.setVisibility(View.GONE);
+
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "createUserWithEmail:success");
                                     Toast.makeText(SignupActivity.this, "Authentication successes.",
                                             Toast.LENGTH_SHORT).show();
-                                    FirebaseUser user = mAuth.getCurrentUser();
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                     Toast.makeText(SignupActivity.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
 
-                 */
+ */
 
-                database = FirebaseDatabase.getInstance();
-                reference = database.getReference("user");
 
-                String username = usernameText.getText().toString();
-                String password = passwordText.getText().toString();
-                String citta = cittaText.getText().toString();
 
-                Persona persona = new Persona(username, password, citta);
-                reference.child(username).setValue(persona);
+                //database = FirebaseDatabase.getInstance();
+                //reference = database.getReference("user");
+
+                //String username = usernameText.getText().toString();
+                //String password = passwordText.getText().toString();
+
+                //Persona persona = new Persona(username, password);
+                //reference.child(username).setValue(persona);
 
                 Toast.makeText(SignupActivity.this, "You have signup successfully!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                //startActivity(intent);
 
-                database = FirebaseDatabase.getInstance();
-                reference = database.getReference("user");
+                //database = FirebaseDatabase.getInstance();
+                //reference = database.getReference("user");
                 //String password = passwordText.getText().toString();
                 //String citta = cittaText.getText().toString();
                 //Persona persona1 = new Persona(password, password, citta);
@@ -142,19 +176,29 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         /*apre calendario*/
-        dataText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    dataText.setRawInputType(InputType.TYPE_NULL);
-                    new DatePickerFragment().show(
-                            getSupportFragmentManager(), DatePickerFragment.TAG);
 
+    }
+    private void signup() {
+        FirebaseAuth
+                .getInstance()
+                .createUserWithEmailAndPassword(email.trim(), password)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        UserProfileChangeRequest userProfileChangeRequest=new UserProfileChangeRequest
+                                .Builder()
+                                .setDisplayName(username).build();
+                        FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+                        firebaseUser.updateProfile(userProfileChangeRequest);
+                        Persona persona= new Persona(FirebaseAuth.getInstance().getCurrentUser().getUid()
+                                , username, email, password);
 
-                }
-
-            }
-        });
+                        reference.child(FirebaseAuth.getInstance().getUid()).setValue(persona);
+                        startActivity(new Intent(SignupActivity.this,MainActivity.class));
+                        finish();
+                    }
+                });
     }
 
     protected void updateValue(int newValue) {
@@ -165,24 +209,25 @@ public class SignupActivity extends AppCompatActivity {
 
 
     private void aggiornaPersona() {
-
         String usernameInserito = usernameText.getText().toString();
         this.persona.setUsername(usernameInserito);
+
+        String emailInserito = emailText.getText().toString();
+        this.persona.setEmail(emailInserito);
 
         String passwordInserito = passwordText.getText().toString();
         this.persona.setPassword(passwordInserito);
 
-        String cittaInserito = cittaText.getText().toString();
-        this.persona.setCitta(cittaInserito);
 
     }
-
+/*
     public void doPositiveClick(Calendar date) {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         dataText.setText(format.format(date.getTime()));
-    }
+    }*/
 
     /*true se è andato a buon fine, false altrimenti*/
+    /*
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean checkInput() {
         int errors = 0;
@@ -209,7 +254,7 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         for (int i = 0; i < SignupActivity.rubrica.size(); i++) {
-            if (usernameText.getText().toString().equals(SignupActivity.rubrica.get(i).getUsername())) {
+            if (usernameText.getText().toString().equals(SignupActivity.rubrica.get(i).getEmail())) {
                 errors++;
                 usernameText.setError("Username già presente");
                 break;
@@ -267,4 +312,6 @@ public class SignupActivity extends AppCompatActivity {
 
         return errors == 0;
     }
+
+     */
 }
