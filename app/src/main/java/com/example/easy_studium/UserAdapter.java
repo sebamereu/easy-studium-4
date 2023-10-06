@@ -2,6 +2,7 @@ package com.example.easy_studium;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,15 @@ import java.util.List;
             Persona persona=personaList.get(position);
             holder.username.setText(persona.getUsername());
             holder.email.setText(persona.getEmail());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent=new Intent(context, ChatActivity.class);
+                    intent.putExtra("userid", persona.getUserId());
+                    context.startActivity(intent);
+                }
+            });
         }
 
         @Override
