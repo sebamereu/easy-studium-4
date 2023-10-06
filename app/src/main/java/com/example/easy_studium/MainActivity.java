@@ -89,9 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d("DailyCalendarFragment1", ""+list.size());
             }
-
-
-            //setDayView();
         }
 
 

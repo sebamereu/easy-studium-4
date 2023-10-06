@@ -140,10 +140,6 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
         }
     }
 
-    public void weeklyAction(View view)
-    {
-        startActivity(new Intent(getActivity(), WeekViewActivity.class));
-    }
 
 
     public void previousMonthAction(View view) {

@@ -56,15 +56,6 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        /*FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            Intent intent= new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-
-         */
     }
 
     @Override
@@ -74,12 +65,8 @@ public class SignupActivity extends AppCompatActivity {
 
 
         passwordText = findViewById(R.id.userPassword);
-        //passwordConfText = findViewById(R.id.attrPasswordConf);
         usernameText = findViewById(R.id.userName);
         emailText = findViewById(R.id.userEmail);
-
-        //dataText = findViewById(R.id.attrData);
-        //cittaText = findViewById(R.id.attrCitta);
         salvaButton = findViewById(R.id.salvaButton);
         clearButton = findViewById(R.id.clearButton);
         errorText = findViewById(R.id.errorText);
@@ -119,64 +106,8 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
                 signup();
-
-/*
-                mAuth.createUserWithEmailAndPassword(username, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(SignupActivity.this, "Authentication successes.",
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(SignupActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
- */
-
-
-
-                //database = FirebaseDatabase.getInstance();
-                //reference = database.getReference("user");
-
-                //String username = usernameText.getText().toString();
-                //String password = passwordText.getText().toString();
-
-                //Persona persona = new Persona(username, password);
-                //reference.child(username).setValue(persona);
-
-                Toast.makeText(SignupActivity.this, "You have signup successfully!", Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                //startActivity(intent);
-
-                //database = FirebaseDatabase.getInstance();
-                //reference = database.getReference("user");
-                //String password = passwordText.getText().toString();
-                //String citta = cittaText.getText().toString();
-                //Persona persona1 = new Persona(password, password, citta);
-                //reference.child(password).setValue(persona1);
-
-
-
-                //    aggiornaPersona();
-
-                //intent.putExtra(PERSONA_EXTRA, persona);
-                //rubrica.add(persona);
-                //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                //startActivity(intent);
-                // }
             }
         });
-
-        /*apre calendario*/
-
     }
     private void signup() {
         FirebaseAuth
@@ -200,118 +131,4 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 });
     }
-
-    protected void updateValue(int newValue) {
-        this.modelvalue = newValue;
-
-
-    }
-
-
-    private void aggiornaPersona() {
-        String usernameInserito = usernameText.getText().toString();
-        this.persona.setUsername(usernameInserito);
-
-        String emailInserito = emailText.getText().toString();
-        this.persona.setEmail(emailInserito);
-
-        String passwordInserito = passwordText.getText().toString();
-        this.persona.setPassword(passwordInserito);
-
-
-    }
-/*
-    public void doPositiveClick(Calendar date) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        dataText.setText(format.format(date.getTime()));
-    }*/
-
-    /*true se è andato a buon fine, false altrimenti*/
-    /*
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private boolean checkInput() {
-        int errors = 0;
-
-        if (dataText.getText() == null || dataText.getText().length() == 0) {
-            errors++;
-            dataText.setError("Inserire la data");
-        } else {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String date = dataText.getText().toString();
-            LocalDate newDate = LocalDate.parse(date, formatter);
-
-            Log.d("Anno", "value = " + newDate);
-            Period period = Period.between(newDate, LocalDate.now());// con anno 1995 e anno corrente 2021 avrò 26, invece se metto una data nel 2021 avrò 0
-            Log.d("Anno", "value = " + period.getYears());
-
-            if (period.getYears() < 18) {
-
-                errors++;
-                dataText.setError("Devi essere maggiorenne per iscriverti");
-            } else {
-                dataText.setError(null);
-            }
-        }
-
-        for (int i = 0; i < SignupActivity.rubrica.size(); i++) {
-            if (usernameText.getText().toString().equals(SignupActivity.rubrica.get(i).getEmail())) {
-                errors++;
-                usernameText.setError("Username già presente");
-                break;
-            } else usernameText.setError(null);
-        }
-
-        if (passwordText.getText() == null || !passwordConfText.getText().toString().equals(passwordText.getText().toString())) {
-            errors++;
-            passwordConfText.setError("Le due password non coincidono");
-        } else passwordConfText.setError(null);
-
-        if (passwordText.getText() == null
-                || passwordText.length() < 8
-                || !passwordText.getText().toString().matches("(.*[0-9].*)")
-                || !passwordText.getText().toString().matches("(.*[A-Z].*)")
-                || !passwordText.getText().toString().matches("^(?=.*[_.()$&@]).*$")) {
-            errors++;
-
-            passwordText.setError("La password deve essere formata" +
-                    " da almeno 8 caratteri di cui" +
-                    " un numero, una lettera maiuscola e un simbolo.");
-        } else passwordText.setError(null);
-
-
-        if (usernameText.getText() == null || usernameText.getText().length() == 0) {
-            errors++;
-            usernameText.setError("Campo vuoto");
-        } else usernameText.setError(null);
-
-
-        if (usernameText.getText().toString().equals("admin")) {
-            errors++;
-            usernameText.setError("Username non valido");
-        } else usernameText.setError(null);
-
-        if (cittaText.getText() == null || cittaText.length() <= 2) {
-            errors++;
-            cittaText.setError("Inserire una città");
-        } else cittaText.setError(null);
-
-        switch (errors) {
-            case 0:
-                errorText.setVisibility(View.GONE);
-                errorText.setText("");
-                break;
-            case 1:
-                errorText.setVisibility(View.VISIBLE);
-                errorText.setText("Si è verificato un errore");
-                break;
-            default:
-                errorText.setVisibility(View.VISIBLE);
-                errorText.setText("Si sono verificati " + errors + " errori");
-                break;
-        }
-
-        return errors == 0;
-    }
-
-     */
 }

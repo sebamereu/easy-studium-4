@@ -75,31 +75,10 @@ public class ExamFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ExamFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ExamFragment newInstance(String param1, String param2) {
-        ExamFragment fragment = new ExamFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -113,84 +92,6 @@ public class ExamFragment extends Fragment {
         examCFU=view.findViewById(R.id.examCFU);
         saveExam=view.findViewById(R.id.saveExamAction);
         errorText=view.findViewById(R.id.errorText);
-
-        eventTimeInizioLunediTV=view.findViewById(R.id.inizioLunedi);
-        eventTimeFineLunediTV=view.findViewById(R.id.fineLunedi);
-        eventTimeInizioMartediTV=view.findViewById(R.id.inizioMartedi);
-        eventTimeFineMartediTV=view.findViewById(R.id.fineMartedi);
-        eventTimeInizioMercolediTV=view.findViewById(R.id.inizioMercoledi);
-        eventTimeFineMercolediTV=view.findViewById(R.id.fineMercoledi);
-        eventTimeInizioGiovediTV=view.findViewById(R.id.inizioGiovedi);
-        eventTimeFineGiovediTV=view.findViewById(R.id.fineGiovedi);
-        eventTimeInizioVenerdiTV=view.findViewById(R.id.inizioVenerdi);
-        eventTimeFineVenerdiTV=view.findViewById(R.id.fineVenerdi);
-
-
-
-
-
-        eventTimeInizioLunediTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //eventTimeTV.setRawInputType(InputType.TYPE_DATETIME_VARIATION_TIME);
-                TimePickerDialog.OnTimeSetListener onTimeSetListener=
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.M)
-                            @Override
-                            public void onTimeSet(TimePicker eventTime, int hour, int minute) {
-
-                                if (eventTime.getMinute()<10)
-                                    eventTimeInizioLunediTV.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute()+"0");
-                                else
-                                    eventTimeInizioLunediTV.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute());
-
-                                eventTime.setHour(eventTime.getHour());
-                                eventTime.setMinute(eventTime.getMinute());
-                                Log.d("EventEditFragment", ""+ eventTime.getHour());
-                                eventTimeInizioLunedi=eventTime;
-                            }
-                        };
-                int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
-
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), style, onTimeSetListener, hour, minute, true );
-
-                timePickerDialog.setTitle("Select time");
-                timePickerDialog.show();
-
-            }
-        });
-
-
-        eventTimeFineLunediTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //eventTimeTV.setRawInputType(InputType.TYPE_DATETIME_VARIATION_TIME);
-                TimePickerDialog.OnTimeSetListener onTimeSetListener=
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.M)
-                            @Override
-                            public void onTimeSet(TimePicker eventTime, int hour, int minute) {
-
-                                if (eventTime.getMinute()<10)
-                                    eventTimeFineLunediTV.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute()+"0");
-                                else
-                                    eventTimeFineLunediTV.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute());
-
-                                eventTime.setHour(eventTime.getHour());
-                                eventTime.setMinute(eventTime.getMinute());
-                                Log.d("EventEditFragment", ""+ eventTime.getHour());
-                                eventTimeFineLunedi=eventTime;
-                            }
-                        };
-                int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
-
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), style, onTimeSetListener, hour, minute, true );
-
-                timePickerDialog.setTitle("Select time");
-                timePickerDialog.show();
-
-            }
-        });
 
         saveExam.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -226,12 +127,6 @@ public class ExamFragment extends Fragment {
                         // Assegna l'oggetto all'utente nel database
                         examRef.child(e.getNameExam()).setValue(exam);
                     }
-
-                    //DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user");
-                    //DatabaseReference referenceUser= reference.child();
-                    //referenceUser.child(examName).setValue(e);
-                    //referenceUser.child(e.getCfu()).setValue(examCFU.getText().toString());
-
                     replaceFragment(new DailyCalendarFragment());
                 }
             }

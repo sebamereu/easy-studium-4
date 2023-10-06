@@ -41,7 +41,7 @@ import com.example.easy_studium.MainActivity.*;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class DailyCalendarFragment extends Fragment {
 
-    private Button  nextDayAction, deleteEvent, weeklyAction;
+    private Button  nextDayAction, deleteEvent;
     public static Button  newEventAction, previousDayAction;
     public static TextView monthDayText;
 
@@ -86,9 +86,7 @@ public class DailyCalendarFragment extends Fragment {
         previousDayAction = (Button) view.findViewById(R.id.previousDayAction);
         nextDayAction=(Button) view.findViewById(R.id.nextDayAction);
         newEventAction= (Button) view.findViewById(R.id.newEventAction);
-        //event1=view.findViewById(R.id.event1);
-        //deleteEvent=view.findViewById(R.id.deleteEvent);
-        weeklyAction=view.findViewById(R.id.weeklyAction);
+
 
         CalendarUtils.selectedDate = LocalDate.now();
 
@@ -129,13 +127,13 @@ public class DailyCalendarFragment extends Fragment {
                 replaceFragment(new EventEditFragment());
             }
         });
-
+/*
         weeklyAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 replaceFragment(new WeekViewFragment());
             }
-        });
+        });*/
 
 
         hourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -223,19 +221,6 @@ public class DailyCalendarFragment extends Fragment {
         }
 
         return list;
-    }
-
-    public void previousDayAction(View view)
-    {
-        CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusDays(1);
-        setDayView();
-    }
-
-
-    public void nextDayAction(View view)
-    {
-        CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusDays(1);
-        setDayView();
     }
 
     void replaceFragment(Fragment fragment){

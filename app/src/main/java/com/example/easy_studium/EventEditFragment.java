@@ -32,54 +32,22 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EventEditFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class EventEditFragment extends DialogFragment {
 
     private EditText eventNameET;
-    private TextView eventDateTV, errorText, errorNullExam;
-    private Button newEventAction, saveEventAction, eventTimeTV, eventTimeFinish;
-    private LocalTime  time;
+    private TextView eventDateTV, errorText;
+    private Button newExamAction, saveEventAction, eventTimeTV, eventTimeFinish;
+    private LocalTime time;
     private LocalDate localDate;
     public static Spinner spinner, spinnerToDo;
     private TimePicker eventTimeInizio, eventTimeFine;
     public static int hour, minute;
-    public static String[] items = new String[]{"Teoria", "Laboratorio", "Progetto"};
     ArrayAdapter<String> adapter1;
     ArrayList<String> arrayList;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public EventEditFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EventEditFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EventEditFragment newInstance(String param1, String param2) {
-        EventEditFragment fragment = new EventEditFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -91,28 +59,33 @@ public class EventEditFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-       View view;
-       view = inflater.inflate(R.layout.fragment_event_edit, container, false);
+        View view;
+        view = inflater.inflate(R.layout.fragment_event_edit, container, false);
 
-        saveEventAction= view.findViewById(R.id.saveEventAction);
+        saveEventAction = view.findViewById(R.id.saveEventAction);
         eventNameET = view.findViewById(R.id.eventNameET);
         eventDateTV = view.findViewById(R.id.eventDateTV);
         eventTimeTV = view.findViewById(R.id.eventTimeTV);
-        eventTimeFinish=view.findViewById(R.id.eventTimeFinish);
-        spinner=view.findViewById(R.id.spinner1);
-        spinnerToDo=view.findViewById(R.id.spinner2);
-        errorText=view.findViewById(R.id.errorText);
-        newEventAction=view.findViewById(R.id.newEventAction);
-        arrayList=Exam.arrayList1;
-        adapter1=ExamFragment.adapter;
+        eventTimeFinish = view.findViewById(R.id.eventTimeFinish);
+        spinner = view.findViewById(R.id.spinner1);
+        spinnerToDo = view.findViewById(R.id.spinner2);
+        errorText = view.findViewById(R.id.errorText);
+        newExamAction = view.findViewById(R.id.newExamAction);
+        arrayList = Exam.arrayList1;
+        adapter1 = ExamFragment.adapter;
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
                 R.array.planets_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        if (!ExamFragment.adapter.isEmpty()) {
+            spinner.setAdapter(adapter1);
+        }else{
+            newExamAction.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.GONE);
 
-        spinner.setAdapter(adapter1);
+        }
+
         spinnerToDo.setAdapter(adapter);
-
 
 
         time = LocalTime.now();
@@ -120,37 +93,34 @@ public class EventEditFragment extends DialogFragment {
         eventDateTV.setText("Date: " + CalendarUtils.formattedDate(CalendarUtils.selectedDate));
         //eventTimeTV.setText("Time: " + CalendarUtils.formattedTime(time));
 
-        if (Exam.listExam.size()==0){
-            newEventAction.setVisibility(View.VISIBLE);
-            spinner.setVisibility(View.GONE);
-        }
+
 
         eventTimeTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    //eventTimeTV.setRawInputType(InputType.TYPE_DATETIME_VARIATION_TIME);
-                    TimePickerDialog.OnTimeSetListener onTimeSetListener=
-                            new TimePickerDialog.OnTimeSetListener() {
-                                @Override
-                                public void onTimeSet(TimePicker eventTime, int hour, int minute) {
+                //eventTimeTV.setRawInputType(InputType.TYPE_DATETIME_VARIATION_TIME);
+                TimePickerDialog.OnTimeSetListener onTimeSetListener =
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker eventTime, int hour, int minute) {
 
-                                    if (eventTime.getMinute()<10)
-                                        eventTimeTV.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute()+"0");
-                                    else
-                                        eventTimeTV.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute());
+                                if (eventTime.getMinute() < 10)
+                                    eventTimeTV.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute() + "0");
+                                else
+                                    eventTimeTV.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute());
 
-                                    eventTime.setHour(eventTime.getHour());
-                                    eventTime.setMinute(eventTime.getMinute());
-                                    Log.d("EventEditFragment", ""+ eventTime.getHour());
-                                    eventTimeInizio=eventTime;
-                                }
-                            };
-                    int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
+                                eventTime.setHour(eventTime.getHour());
+                                eventTime.setMinute(eventTime.getMinute());
+                                Log.d("EventEditFragment", "" + eventTime.getHour());
+                                eventTimeInizio = eventTime;
+                            }
+                        };
+                int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
 
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), style, onTimeSetListener, hour, minute, true );
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), style, onTimeSetListener, hour, minute, true);
 
-                    timePickerDialog.setTitle("Select time");
-                    timePickerDialog.show();
+                timePickerDialog.setTitle("Select time");
+                timePickerDialog.show();
 
             }
         });
@@ -159,24 +129,24 @@ public class EventEditFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 //eventTimeTV.setRawInputType(InputType.TYPE_DATETIME_VARIATION_TIME);
-                TimePickerDialog.OnTimeSetListener onTimeSetListener1=
+                TimePickerDialog.OnTimeSetListener onTimeSetListener1 =
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker eventTime, int hour, int minute) {
-                                if (eventTime.getMinute()<10)
-                                    eventTimeFinish.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute()+"0");
+                                if (eventTime.getMinute() < 10)
+                                    eventTimeFinish.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute() + "0");
                                 else
                                     eventTimeFinish.setText("Time: " + eventTime.getHour() + ":" + eventTime.getMinute());
 
                                 eventTime.setHour(eventTime.getHour());
                                 eventTime.setMinute(eventTime.getMinute());
-                                Log.d("EventEditFragment", ""+ eventTime.getHour());
-                                eventTimeFine=eventTime;
+                                Log.d("EventEditFragment", "" + eventTime.getHour());
+                                eventTimeFine = eventTime;
                             }
                         };
                 int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), style, onTimeSetListener1, hour, minute, true );
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), style, onTimeSetListener1, hour, minute, true);
 
                 timePickerDialog.setTitle("Select time");
                 timePickerDialog.show();
@@ -185,10 +155,10 @@ public class EventEditFragment extends DialogFragment {
         });
 
 
-        newEventAction.setOnClickListener(new View.OnClickListener() {
+        newExamAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragment(new EventEditFragment());
+                replaceFragment(new ExamFragment());
             }
         });
 
@@ -240,9 +210,6 @@ public class EventEditFragment extends DialogFragment {
 
                     Event[] events = new Event[max + 1];
 
-                    //Event eventInizio = new Event(eventName, CalendarUtils.selectedDate, time, timePickerInizio);
-                    //Event.eventsList.add(eventInizio);
-                    //Log.d("EventEditFragment", "" + eventInizio.getTimePicker().getHour() + ":" + eventInizio.getTimePicker().getMinute());
                     for (int i = 0; i < max; i++) {
                         // Ottieni l'istanza di FirebaseAuth
                         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -265,64 +232,41 @@ public class EventEditFragment extends DialogFragment {
                                 DatabaseReference eventsRef = userRef.child("events");
                                 DatabaseReference eventRef = eventsRef.child(eventName);
 
-                                // Assegna l'oggetto all'utente nel database
 
-                                //eventsRef.child(events[i].getNameEvent()).setValue(events[i]);
-/*
-                                eventRef.child("nameEvent").setValue(eventName);
-                                eventRef.child("date").setValue(localDate.toString());
-                                eventRef.child("examName").setValue(spinner.getSelectedItem());
-                                eventRef.child("time").setValue(time);
-                                eventRef.child("examMode").setValue(spinnerToDo.getSelectedItem());
-                                eventRef.child("timePicker").setValue(timePickers[i]);
-                                 */
-                             }
+                            }
                             Event.eventsList.add(events[i]);
-                        } /*else {
-                            events[i] = new Event("", CalendarUtils.selectedDate, time, spinner.getSelectedItem(), spinnerToDo.getSelectedItem(), timePickers[i]);
-                            Event.eventsList.add(events[i]);
+                        }
 
-                        }*/
-
-                        //Log.d("EventEditFragment", "" + eventInizio.getTimePicker().getHour() + ":" + eventInizio.getTimePicker().getMinute());
-
-                        //Log.d("EventEditFragment", "" + events[i].getTimePicker().getHour() + ":" + events[i].getTimePicker().getMinute());
                     }
-
-
-
                     replaceFragment(new DailyCalendarFragment());
                 }
-           }
+            }
         });
         // Inflate the layout for this fragment
         return view;
     }
 
     private boolean checkInput() {
-        int errors=0;
-        TextView errorTextExam = (TextView)spinner.getSelectedView();
-        TextView errorTextToDo = (TextView)spinnerToDo.getSelectedView();
+        int errors = 0;
 
-       if(Exam.listExam.size()==0) {
+        if (Exam.listExam.size() == 0) {
             errors++;
-           newEventAction.setError("Inserire almeno un esme");
-       }else newEventAction.setError(null);
+            newExamAction.setError("Inserire almeno un esme");
+        } else newExamAction.setError(null);
 
-        if(eventTimeInizio==null ) {
+        if (eventTimeInizio == null) {
             errors++;
             eventTimeTV.setError("Inserire orario d'inizio");
-        }else  eventTimeTV.setError(null);
+        } else eventTimeTV.setError(null);
 
 
-        if(eventTimeFine==null ) {
+        if (eventTimeFine == null) {
             errors++;
             eventTimeFinish.setError("Inserire orario d'inizio");
-        }else  eventTimeFinish.setError(null);
+        } else eventTimeFinish.setError(null);
 
 
-
-        switch (errors){
+        switch (errors) {
             case 0:
                 errorText.setVisibility(View.GONE);
                 errorText.setText("");
@@ -333,17 +277,16 @@ public class EventEditFragment extends DialogFragment {
                 break;
             default:
                 errorText.setVisibility(View.VISIBLE);
-                errorText.setText("Si sono verificati "+errors+" errori");
+                errorText.setText("Si sono verificati " + errors + " errori");
                 break;
         }
-
-        return errors==0;
+        return errors == 0;
     }
 
 
-    void replaceFragment(Fragment fragment){
+    void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
