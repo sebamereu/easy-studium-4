@@ -36,7 +36,7 @@ public class HourAdapter extends ArrayAdapter<HourEvent>
 
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.hour_cell, parent, false);
-            deleteEvent=convertView.findViewById(R.id.deleteEvent);
+        //deleteEvent=convertView.findViewById(R.id.deleteEvent);
 
         setHour(convertView, event.time);
         setEvents(convertView, event.events);
@@ -91,6 +91,5 @@ public class HourAdapter extends ArrayAdapter<HourEvent>
 
 
 }
-
 
 

@@ -10,10 +10,14 @@ public class Exam {
     public static ArrayList<String> arrayList1=new ArrayList<>();
     public static ArrayList<Exam> listExam=new ArrayList<>();
 
+
+
+    private String examId;
     private String nameExam;
     private String cfu;
 
-    public Exam(String nameExam, String cfu){
+    public Exam(String examId, String nameExam, String cfu){
+        this.examId=examId;
         this.nameExam=nameExam;
         this.cfu=cfu;
     }
@@ -26,7 +30,13 @@ public class Exam {
     public Exam(){}
 
 
+    public String getExamId() {
+        return examId;
+    }
 
+    public void setExamId(String examId) {
+        this.examId = examId;
+    }
     public String getNameExam() {
         return nameExam;
     }

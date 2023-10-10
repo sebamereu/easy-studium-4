@@ -25,7 +25,7 @@
             android:letterSpacing="0.03"
             android:text="Benvenuto"
             android:textColor="@color/grigioapp"
-            android:textSize="25dp"
+            android:textSize="18dp"
             android:textStyle="bold" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_marginLeft="5dp"
             android:letterSpacing="0.03"
             android:textColor="@color/grigioapp"
-            android:textSize="25dp"
+            android:textSize="18dp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -50,17 +50,6 @@
         android:layout_width="match_parent"
         android:layout_height="25dp" />
 
-    <TextView
-        android:id="@+id/modificaPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:gravity="center_horizontal"
-        android:text="Modifica password"
-        android:textColor="@color/celesteapp"
-        android:textSize="18dp"
-        android:textStyle="bold" />
-
 
 
     <Button
@@ -70,28 +59,16 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/button"
         android:text="LOGOUT"
-        android:textColor="@color/celesteapp"
+        android:textColor="@color/white"
         android:textSize="18dp"
         android:textStyle="bold" />
 
-
-    <Button
-        android:id="@+id/chatButton"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/button"
-        android:text="CHAT"
-        android:textColor="@color/celesteapp"
-        android:textSize="18dp"
-        android:textStyle="bold" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
 
 
 

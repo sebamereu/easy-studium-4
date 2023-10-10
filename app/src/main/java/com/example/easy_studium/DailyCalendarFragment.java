@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -30,68 +31,52 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
 import com.example.easy_studium.MainActivity.*;
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CalendarFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class DailyCalendarFragment extends Fragment {
 
-    private Button  nextDayAction, deleteEvent;
-    public static Button  newEventAction, previousDayAction;
+    private Button nextDayAction;
+    public static Button newEventAction, previousDayAction;
     public static TextView monthDayText;
 
     public static TextView dayOfWeekTV;
     public static ListView hourListView;
-    LocalTime time = LocalTime.now();
-
+    ArrayList<Event> eventList;
 
 
     public DailyCalendarFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CalendarFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DailyCalendarFragment newInstance(String param1, String param2) {
-        DailyCalendarFragment fragment = new DailyCalendarFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_daily_calendar, container, false);
-        View convertView= inflater.inflate(R.layout.hour_cell, container, false);
+        View view = inflater.inflate(R.layout.fragment_daily_calendar, container, false);
 
         monthDayText = (TextView) view.findViewById(R.id.monthDayText);
         dayOfWeekTV = (TextView) view.findViewById(R.id.dayOfWeekTV);
         hourListView = (ListView) view.findViewById(R.id.hourListView);
         previousDayAction = (Button) view.findViewById(R.id.previousDayAction);
-        nextDayAction=(Button) view.findViewById(R.id.nextDayAction);
-        newEventAction= (Button) view.findViewById(R.id.newEventAction);
+        nextDayAction = (Button) view.findViewById(R.id.nextDayAction);
+        newEventAction = (Button) view.findViewById(R.id.newEventAction);
+
 
 
         CalendarUtils.selectedDate = LocalDate.now();
 
-        setDayView();
-
+        eventList = new ArrayList<>();
+        readEvent();
+        //setDayView();
 
 
         previousDayAction.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +84,8 @@ public class DailyCalendarFragment extends Fragment {
             public void onClick(View v) {
 
                 CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusDays(1);
-                setDayView();;
+                setDayView();
+
             }
         });
 
@@ -122,18 +108,14 @@ public class DailyCalendarFragment extends Fragment {
         });
 
         newEventAction.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
+
                 replaceFragment(new EventEditFragment());
             }
         });
-/*
-        weeklyAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment(new WeekViewFragment());
-            }
-        });*/
 
 
         hourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -155,7 +137,7 @@ public class DailyCalendarFragment extends Fragment {
 
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-                    ft.replace(R.id.deleteEvent, fragment);
+                    //ft.replace(R.id.deleteEvent, fragment);
 
                     ft.addToBackStack(null);
 
@@ -166,66 +148,95 @@ public class DailyCalendarFragment extends Fragment {
         });
 
 
-
         // Inflate the layout for this fragment
-        return  view;
+        return view;
+    }
+
+    private void readEvent() {
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("events");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Event.eventsList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Event event = snapshot.getValue(Event.class);
+                    if (event.getEventId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        Event.eventsList.add(event);
+                    }
+                }
+                setDayView();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         setDayView();
     }
 
-    private void setDayView()
-    {
+    private void setDayView() {
         monthDayText.setText(CalendarUtils.monthDayFromDate(selectedDate));
         String dayOfWeek = selectedDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault());
         dayOfWeekTV.setText(dayOfWeek);
-        int dateDay=selectedDate.getDayOfYear();
-        int day=Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+        int dateDay = selectedDate.getDayOfYear();
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
 
-        int i = (int) (new Date().getTime()/1000);
-        if(dateDay<day)
-        {
+        if (dateDay < day) {
             newEventAction.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             newEventAction.setVisibility(View.VISIBLE);
         }
         setHourAdapter();
     }
 
-    public void setHourAdapter()
-    {
-        HourAdapter hourAdapter = new HourAdapter(getActivity().getApplicationContext(), hourEventList());
-        hourListView.setAdapter(hourAdapter);
+    public void setHourAdapter() {
+
+            HourAdapter hourAdapter = new HourAdapter(getContext(), hourEventList());
+            hourListView.setAdapter(hourAdapter);
+
     }
 
-    private ArrayList<HourEvent> hourEventList()
-    {
+    private ArrayList<HourEvent> hourEventList() {
         ArrayList<HourEvent> list = new ArrayList<>();
-        for(int hour = 0; hour < 24; hour++) {
+        for (int hour = 0; hour < 24; hour++) {
+
             LocalTime time = LocalTime.of(hour, 0);
+
             ArrayList<Event> events = Event.eventsForDateAndTime(selectedDate, time);
             HourEvent hourEvent = new HourEvent(time, events);
             list.add(hourEvent);
-
-             time = LocalTime.of(hour, 30);
-             events = Event.eventsForDateAndTime(selectedDate, time);
-             hourEvent = new HourEvent(time, events);
+/*
+            time = LocalTime.of(hour, 30);
+            events = Event.eventsForDateAndTime(dateStr, time);
+            hourEvent = new HourEvent(time, events);
             list.add(hourEvent);
 
-            Log.d("DailyCalendarFragment1", ""+list.size());
+ */
         }
 
         return list;
     }
+    public void previousDayAction(View view)
+    {
+        CalendarUtils.selectedDate = CalendarUtils.selectedDate.minusDays(1);
+        setDayView();
+    }
 
-    void replaceFragment(Fragment fragment){
+    public void nextDayAction(View view)
+    {
+        CalendarUtils.selectedDate = CalendarUtils.selectedDate.plusDays(1);
+        setDayView();
+    }
+
+    void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }

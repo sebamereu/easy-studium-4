@@ -262,6 +262,8 @@
     <color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
+    <color name="red_pastel">#ff4d4d</color>
+
     <color name="teal_200">#ff03dac5</color>
     <color name="teal_700">#ff018786</color>
     <color name="test_color">#000</color>

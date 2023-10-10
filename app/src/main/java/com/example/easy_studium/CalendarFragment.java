@@ -162,7 +162,7 @@ public class CalendarFragment extends Fragment implements CalendarAdapter.OnItem
     {
         ArrayList<Event> dailyEvents = Event.eventsForDate(CalendarUtils.selectedDate);
         EventAdapter eventAdapter = new EventAdapter(getActivity().getApplicationContext(), dailyEvents);
-        eventListView.setAdapter(eventAdapter);
+        //eventListView.setAdapter(eventAdapter);
     }
 
 }

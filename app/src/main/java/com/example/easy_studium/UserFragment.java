@@ -49,10 +49,8 @@ public class UserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //View view=inflater.inflate(R.layout.fragment_user,container,false);
         fragmentUserBinding = FragmentUserBinding.inflate(inflater, container, false);
         View view = inflater.inflate(R.layout.fragment_user,container,false);
-        //logoutButton= (Button) view.findViewById(R.id.logoutButton);
 
         recyclerView= view.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
@@ -61,37 +59,13 @@ public class UserFragment extends Fragment {
         personaList= new ArrayList<>();
         readUsers();
 
-
-
-        userText=(TextView) view.findViewById(R.id.confUser);
-        //passwordText=(TextView) view.findViewById(R.id.confPassword);
-        //dataText=(TextView) view.findViewById(R.id.confData);
-        //cittaText=(TextView) view.findViewById(R.id.confCitta);
+        userText=view.findViewById(R.id.confUser);
         logoutButton=view.findViewById(R.id.logoutButton);
-        chatButton=view.findViewById(R.id.chatButton);
-        //modificaPassword=(TextView) view.findViewById(R.id.modificaPassword);
+        //chatButton=view.findViewById(R.id.chatButton);
 
         auth= FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
-        //personaRicevuta= SignupActivity.rubrica.get(SignupActivity.rubrica.size()-1);
         userText.setText(user.getEmail());
-        //passwordText.setText(auth.getCurrentUser().getProviderId());
-        //SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        //cittaText.setText(personaRicevuta.getCitta());
-
-        //setContent(fragmentUserBinding.getRoot());
-/*
-        if (user != null) {
-
-            chatButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(getActivity(), ChatActivity.class));
-
-                }
-            });
-
- */
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -101,32 +75,11 @@ public class UserFragment extends Fragment {
             }
         });
 
-
-// Get the currently authenticated user
-            // The user is authenticated, so we can proceed with getting the child object
-
-            // Get a reference to the database
-
-        //}
-        /*Button per fare logout*/
-
-
-        /*Button per modificare la password*/
-     /*   modificaPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), PasswordActivity.class));
-            }
-        });
-
-      */
-
         // Inflate the layout for this fragment
         return view;
     }
 
     private void readUsers() {
-        final FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference=FirebaseDatabase.getInstance().getReference("users");
 
         reference.addValueEventListener(new ValueEventListener() {

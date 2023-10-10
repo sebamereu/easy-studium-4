@@ -6,71 +6,72 @@
     android:orientation="vertical"
     tools:context=".ExamStatFragment">
 
-    <ScrollView
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/addExam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20sp"
+            android:background="@null"
+            android:text="Aggiungi esame"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/addExam"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20sp"
-                android:background="@null"
-                android:text="Aggiungi esame"
-                android:textColor="@color/blue"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:text="Ore di studio fino ad oggi: "
+                android:textSize="24dp" />
 
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ore di studio fino ad oggi: "
-                    android:textSize="24dp" />
-
-                <TextView
-                    android:id="@+id/hourStudy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ore:"
-                    android:textSize="24dp" />
-            </LinearLayout>
-
-            <ListView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="606dp"
-                android:layout_below="@+id/logoutButton"></ListView>
-
-         <!--   <view
-                android:id="@+id/piechart"
-                class="com.example.easy_studium.PieChartView"
+            <TextView
+                android:id="@+id/hourStudy"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <com.anychart.AnyChartView
-                android:id="@+id/anyChart"
-                android:layout_width="350dp"
-                android:layout_height="350dp"
-                android:layout_gravity="center">
-
-            </com.anychart.AnyChartView>-->
+                android:layout_height="wrap_content"
+                android:text="Ore:"
+                android:textSize="24dp" />
         </LinearLayout>
-    </ScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_exam"
+            android:layout_width="match_parent"
+            android:layout_height="523dp" />
+        <!--   <ListView
+               android:id="@+id/list"
+               android:layout_width="match_parent"
+               android:layout_height="606dp"
+               android:layout_below="@+id/logoutButton"></ListView> -->
+
+        <!--   <view
+               android:id="@+id/piechart"
+               class="com.example.easy_studium.PieChartView"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
+
+           <com.anychart.AnyChartView
+               android:id="@+id/anyChart"
+               android:layout_width="350dp"
+               android:layout_height="350dp"
+               android:layout_gravity="center">
+
+           </com.anychart.AnyChartView>-->
+    </LinearLayout>
+
 </LinearLayout>

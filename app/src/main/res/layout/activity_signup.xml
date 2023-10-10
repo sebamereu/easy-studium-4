@@ -136,7 +136,7 @@
                 android:background="@drawable/button"
                 android:textSize="18dp"
                 android:textStyle="bold"
-                android:textColor="@color/celesteapp"
+                android:textColor="@color/white"
                 android:layout_marginTop="20dp" />
 
             <TextView

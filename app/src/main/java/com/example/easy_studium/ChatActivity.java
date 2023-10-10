@@ -27,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -57,11 +59,9 @@ public class ChatActivity extends AppCompatActivity {
         });
 
  */
-
         username=findViewById(R.id.username_chat);
         btn_send=findViewById(R.id.btn_send);
         text_send=findViewById(R.id.text_send);
-        
         recyclerView=findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getApplicationContext());
@@ -137,5 +137,33 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+    }
+    class MessagingManager {
+        private ExecutorService executor;
+
+        public MessagingManager() {
+            executor = Executors.newFixedThreadPool(2); // Un thread per ricevere i messaggi, uno per aggiornare l'UI
+        }
+
+        public void start() {
+            executor.execute(new MessageReceiver());
+            executor.execute(new UIUpdater());
+        }
+
+        class MessageReceiver implements Runnable {
+            @Override
+            public void run() {
+                // Qui va il codice per ricevere i nuovi messaggi
+                // Quando ricevi un nuovo messaggio, aggiungilo a una coda di messaggi da visualizzare
+            }
+        }
+
+        class UIUpdater implements Runnable {
+            @Override
+            public void run() {
+                // Qui va il codice per aggiornare l'interfaccia utente con i nuovi messaggi
+                // Controlla la coda di messaggi da visualizzare e aggiorna l'UI quando ci sono nuovi messaggi
+            }
+        }
     }
 }

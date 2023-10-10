@@ -2,6 +2,10 @@ package com.example.easy_studium;
 
 import static com.example.easy_studium.CalendarUtils.selectedDate;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -13,6 +17,7 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -38,6 +43,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,34 +71,31 @@ public class MainActivity extends AppCompatActivity {
             // The user is authenticated, so we can proceed with getting the child object
 
             // Get a reference to the database
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
 
             // Create a reference to the user in the database
-            DatabaseReference reference = database.getReference("user");
+            /*ExamFragment.arrayList=ExamStatFragment.examNameList;
+            ExamFragment.arrayListExam=(ArrayList<Exam>) ExamStatFragment.examList;
+            ExamFragment.adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, ExamStatFragment.examNameList);
+            ExamFragment.adapterExam = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, ExamStatFragment.examList);
 
-            ExamFragment.arrayList=Exam.arrayList1;
-            ExamFragment.arrayListExam=Exam.listExam;
-            ExamFragment.adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, ExamFragment.arrayList);
-            ExamFragment.adapterExam = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, ExamFragment.arrayListExam);
+             */
 
             CalendarUtils.selectedDate = LocalDate.now();
+            String dateStr = CalendarUtils.selectedDate.toString(); // convert LocalDate to String
 
             ArrayList<HourEvent> list = new ArrayList<>();
-            for(int hour = 0; hour < 24; hour++) {
+            for (int hour = 0; hour < 24; hour++) {
                 LocalTime time = LocalTime.of(hour, 0);
-                ArrayList<Event> events = Event.eventsForDateAndTime(selectedDate, time);
+                ArrayList<Event> events = Event.eventsForDateAndTime(LocalDate.now(), time);
                 HourEvent hourEvent = new HourEvent(time, events);
                 list.add(hourEvent);
 
                 time = LocalTime.of(hour, 30);
-                events = Event.eventsForDateAndTime(selectedDate, time);
+                events = Event.eventsForDateAndTime(LocalDate.now(), time);
                 hourEvent = new HourEvent(time, events);
                 list.add(hourEvent);
-
-                Log.d("DailyCalendarFragment1", ""+list.size());
             }
         }
-
 
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
 
@@ -104,11 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.profilo:
                     replaceFragment(new UserFragment());
                     break;
-
-
             }
-
-
             return true;
         });
     }
@@ -119,8 +120,4 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
-
-
-
-
 }

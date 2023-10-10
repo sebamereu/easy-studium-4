@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -22,19 +23,19 @@ import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ExamFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ExamFragment extends Fragment {
     private  TextView errorText;
     private EditText examName, examCFU;
@@ -42,34 +43,12 @@ public class ExamFragment extends Fragment {
     public static ArrayAdapter<String> adapter;
     public static ArrayAdapter<Exam> adapterExam;
 
-    private Button eventTimeInizioLunediTV, eventTimeFineLunediTV,
-            eventTimeInizioMartediTV, eventTimeFineMartediTV,
-            eventTimeInizioMercolediTV, eventTimeFineMercolediTV,
-            eventTimeInizioGiovediTV, eventTimeFineGiovediTV,
-            eventTimeInizioVenerdiTV, eventTimeFineVenerdiTV;
-
-    private TimePicker eventTimeInizioLunedi, eventTimeFineLunedi,
-            eventTimeInizioMartedi, eventTimeFineMartedi,
-            eventTimeInizioMercoledi, eventTimeFineMercoledi,
-            eventTimeInizioGiovedi, eventTimeFineGiovedi,
-            eventTimeInizioVenerdi, eventTimeFineVenerdi;
-
     public static ArrayList<String> arrayList;
     public static ArrayList<Exam> arrayListExam;
 
-    FirebaseDatabase database;
+    List<Exam> examList;
+    ArrayList<String> examNameList;
 
-    public static int hour, minute;
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public ExamFragment() {
         // Required empty public constructor
@@ -93,16 +72,17 @@ public class ExamFragment extends Fragment {
         saveExam=view.findViewById(R.id.saveExamAction);
         errorText=view.findViewById(R.id.errorText);
 
+        //readExam();
+        
         saveExam.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 if (checkInput()) {
-                    Exam e = new Exam(examName.getText().toString(), examCFU.getText().toString());
+                    Exam e = new Exam(FirebaseAuth.getInstance().getCurrentUser().getUid(), examName.getText().toString(), examCFU.getText().toString());
                     e.setNameExam(examName.getText().toString());
                     e.setCfu(examCFU.getText().toString());
-                    Exam.arrayList1.add(e.getNameExam());
-                    Exam.listExam.add(e);
+
 
                     // Ottieni l'istanza di FirebaseAuth
                     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -117,15 +97,13 @@ public class ExamFragment extends Fragment {
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
                         // Crea un riferimento all'utente nel database
-                        DatabaseReference userRef = database.getReference("user").child(user.getUid());
-                        DatabaseReference examRef = userRef.child("exams");
-
+                        DatabaseReference reference = database.getReference("exams");
 
                         // Crea l'oggetto da assegnare all'utente
-                         Exam exam = new Exam(examName.getText().toString(), examCFU.getText().toString());
+                         Exam exam = new Exam(FirebaseAuth.getInstance().getCurrentUser().getUid(), examName.getText().toString(), examCFU.getText().toString());
 
                         // Assegna l'oggetto all'utente nel database
-                        examRef.child(e.getNameExam()).setValue(exam);
+                        reference.push().setValue(exam);
                     }
                     replaceFragment(new DailyCalendarFragment());
                 }
