@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder>{
@@ -97,8 +99,20 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder>{
         String oreLabString= "";
 
         for (Event event : Event.eventsList) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate eventDate = null;
+            try {
+                // Convertir la cadena en un objeto LocalDate
+                eventDate = LocalDate.parse(event.getDateEvent(), formatter);
+
+                // Ahora 'fecha' contiene la fecha en formato LocalDate
+                System.out.println("Fecha: " + eventDate);
+            } catch (Exception e) {
+                System.out.println("La cadena no pudo ser convertida a LocalDate. Asegúrate de que esté en el formato correcto.");
+            }
             if (event.getExamName().equals(examNameList.get(position).getNameExam())
-            && event.getEventId().equals(examNameList.get(position).getExamId())) {
+                    && event.getEventId().equals(examNameList.get(position).getExamId())
+                    && LocalDate.now().isAfter(eventDate)) {
                 ore++;
                 if (event.getExamMode().equals("Teoria")) oreTeoriaInt++;
                 if (event.getExamMode().equals("Laboratorio")) oreLaboratorioInt++;

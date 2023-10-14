@@ -3,6 +3,7 @@ package com.example.easy_studium;
 import static com.example.easy_studium.CalendarUtils.selectedDate;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import com.example.easy_studium.MainActivity.*;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,7 +44,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class DailyCalendarFragment extends Fragment {
 
     private Button nextDayAction;
@@ -77,7 +78,6 @@ public class DailyCalendarFragment extends Fragment {
 
         readEvent();
         //setDayView();
-
 
         previousDayAction.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,34 +118,6 @@ public class DailyCalendarFragment extends Fragment {
         });
 
 
-        hourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Fragment fragment = null;
-
-                switch (position) {
-
-                    case 0:
-                        fragment = new DeleteEventFragment();
-
-                        break;
-
-                }
-
-                if (fragment != null) {
-
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-                    //ft.replace(R.id.deleteEvent, fragment);
-
-                    ft.addToBackStack(null);
-
-                    ft.commit();
-                }
-
-            }
-        });
 
 
         // Inflate the layout for this fragment
@@ -161,7 +133,8 @@ public class DailyCalendarFragment extends Fragment {
                 Event.eventsList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Event event = snapshot.getValue(Event.class);
-                    if (event.getEventId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    assert event != null;
+                    if (event.getEventId().equals(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())) {
                         Event.eventsList.add(event);
                     }
                 }
@@ -192,13 +165,14 @@ public class DailyCalendarFragment extends Fragment {
         } else {
             newEventAction.setVisibility(View.VISIBLE);
         }
-        setHourAdapter();
+        setHourAdapter(getContext());
     }
 
-    public void setHourAdapter() {
+    public void setHourAdapter(Context context) {
 
-            HourAdapter hourAdapter = new HourAdapter(getContext(), hourEventList());
+            HourAdapter hourAdapter = new HourAdapter(DailyCalendarFragment.newEventAction.getContext(), hourEventList());
             hourListView.setAdapter(hourAdapter);
+            hourListView.setSelection(LocalTime.now().getHour());
 
     }
 

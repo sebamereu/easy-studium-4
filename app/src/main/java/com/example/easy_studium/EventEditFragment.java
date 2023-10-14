@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -45,8 +47,8 @@ import java.util.List;
 public class EventEditFragment extends DialogFragment {
 
     private EditText eventNameET;
-    private TextView eventDateTV, errorText;
-    private Button newExamAction, saveEventAction, eventTimeTV, eventTimeFinish;
+    private TextView eventDateTV, errorText, newExamAction;
+    private Button saveEventAction, eventTimeTV, eventTimeFinish;
     private String timeNowString;
     private LocalDate localDate;
     public static Spinner spinner, spinnerToDo;
@@ -263,7 +265,27 @@ public class EventEditFragment extends DialogFragment {
                         for (int i = 0; i < max; i++) {
 
                             if (i == 0) {
+                                if (spinner.getSelectedItem()==null) {
+                                    Toast.makeText(getContext(), "Enter exam.",
+                                            Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (spinnerToDo.getSelectedItem()==null) {
+                                    Toast.makeText(getContext(), "Enter study mood.",
+                                            Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (spinnerToDo.getSelectedItem()==null) {
+                                    Toast.makeText(getContext(), "Enter study mood.",
+                                            Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                if (timePickers[i]==null){
+                                    Toast.makeText(getContext(), "Enter start time.",
+                                            Toast.LENGTH_SHORT).show();
+                                    return;
 
+                                }
                                 // Crea l'oggetto da assegnare all'utente
                                 events[i] = new Event(FirebaseAuth.getInstance().getUid(), eventName,
                                         dateStr, spinner.getSelectedItem(), spinnerToDo.getSelectedItem(), timePickString[i]);
@@ -287,15 +309,9 @@ public class EventEditFragment extends DialogFragment {
                             }
 
                         }
+                        replaceFragment(new DailyCalendarFragment());
 
                     }
-
-
-
-                    // Assegna l'oggetto all'utente nel database
-
-
-                    replaceFragment(new DailyCalendarFragment());
                 }
             }
         });
@@ -326,7 +342,7 @@ public class EventEditFragment extends DialogFragment {
                     }
 
                 }
-                ArrayAdapter<String> examAdapter = new ArrayAdapter<>(getContext(),
+                ArrayAdapter<String> examAdapter = new ArrayAdapter<>(EventEditFragment.spinner.getContext(),
                         android.R.layout.simple_spinner_item, examNameList);
                 examAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20sp"
-            android:background="@null"
+            android:background="@drawable/button"
             android:text="Aggiungi esame"
             android:textColor="@color/white"
             android:textSize="20sp"

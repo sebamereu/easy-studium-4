@@ -98,10 +98,17 @@ public class SignupActivity extends AppCompatActivity {
                 password=String.valueOf(passwordText.getText());
 
                 if(TextUtils.isEmpty(username)){
+                    usernameText.setError("inserire username");
+                    Toast.makeText(SignupActivity.this, "Enter username",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(TextUtils.isEmpty(email)){
+                    emailText.setError("inserire email");
                     Toast.makeText(SignupActivity.this, "Enter email",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
+                    passwordText.setError("inserire password");
                     Toast.makeText(SignupActivity.this, "Enter password",Toast.LENGTH_SHORT).show();
                     return;
                 }
