@@ -70,11 +70,11 @@ public class DailyCalendarFragment extends Fragment {
         nextDayAction = (Button) view.findViewById(R.id.nextDayAction);
         newEventAction = (Button) view.findViewById(R.id.newEventAction);
 
-
-
         CalendarUtils.selectedDate = LocalDate.now();
 
         eventList = new ArrayList<>();
+
+
         readEvent();
         //setDayView();
 

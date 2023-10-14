@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Aggiungi esame"
-                android:textColor="@color/blue"
+                android:textColor="@color/white"
                 android:background="@null"
                 android:visibility="gone"
                 android:textStyle="bold"

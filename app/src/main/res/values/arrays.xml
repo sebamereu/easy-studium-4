@@ -3,6 +3,6 @@
     <string-array name="planets_array">
         <item>Teoria</item>
         <item>Laboratorio</item>
-        <item>Progetto</item>
+        <item>Esame</item>
     </string-array>
 </resources>

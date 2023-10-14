@@ -88,38 +88,39 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder>{
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ExamAdapter.ViewHolder holder, int position) {
-        Exam exam=examNameList.get(position);
 
-        String esame;
-        String controllo;
         int ore = 0;
         int oreTeoriaInt = 0;
         int oreLaboratorioInt = 0;
+        String oreString= "";
+        String oreTeoriaString= "";
+        String oreLabString= "";
 
-        for (int i = 0; i < Event.eventsList.size(); i++) {
-            controllo = String.valueOf(Event.eventsList.get(i).getExamName());
-            if (controllo.equals(examNameList.get(position))) {
+        for (Event event : Event.eventsList) {
+            if (event.getExamName().equals(examNameList.get(position).getNameExam())
+            && event.getEventId().equals(examNameList.get(position).getExamId())) {
                 ore++;
-                if (Event.eventsList.get(i).getExamMode().equals("Teoria")) oreTeoriaInt++;
-                if (Event.eventsList.get(i).getExamMode().equals("Laboratorio"))
-                    oreLaboratorioInt++;
+                if (event.getExamMode().equals("Teoria")) oreTeoriaInt++;
+                if (event.getExamMode().equals("Laboratorio")) oreLaboratorioInt++;
 
             }
         }
-        ore = ore / 2;
-        oreTeoriaInt = oreTeoriaInt / 2;
-        oreLaboratorioInt = oreLaboratorioInt / 2;
-        esame = (examNameList.get(position) + ":" + ore + " ore.");
-        holder.name.setText(esame);
+        if(ore>0){
+            ore = ore / 2;
+            oreTeoriaInt = oreTeoriaInt / 2;
+            oreLaboratorioInt = oreLaboratorioInt / 2;
+            //esame = (examNameList.get(position).getNameExam());
+        }
 
-        esame = ( oreTeoriaInt + " ore.");
-        holder.oreTeoria.setText(esame);
+        oreString =""+ore;
+        oreTeoriaString =""+oreTeoriaInt;
+        oreLabString =""+oreLaboratorioInt;
+        //holder.name.setText(esame);
 
-        esame = (oreLaboratorioInt + " ore.");
-        holder.oreLaboratorio.setText(esame);
-
-
-        holder.name.setText(exam.getNameExam());
+        holder.oreTot.setText(oreString);
+        holder.oreTeoria.setText(oreTeoriaString);
+        holder.oreLaboratorio.setText(oreLabString);
+        holder.name.setText(examNameList.get(position).getNameExam());
     }
 
     @Override
@@ -128,10 +129,11 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder>{
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView name, oreTeoria, oreLaboratorio;
+        public TextView name, oreTeoria, oreLaboratorio, oreTot;
         public ViewHolder(View itemView){
             super(itemView);
             name=itemView.findViewById(R.id.name);
+            oreTot=itemView.findViewById(R.id.hour);
             oreTeoria = itemView.findViewById(R.id.hourTeoria);
             oreLaboratorio = itemView.findViewById(R.id.hourLaboratorio);
 

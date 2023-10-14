@@ -73,45 +73,18 @@ public class ExamStatFragment extends Fragment {
         examList = new ArrayList<>();
         examNameList = new ArrayList<>();
 
-        String controllo;
         readExam();
 
-        //adapter = new ExamAdapter(getContext(), examNameList);
-        //listView.setAdapter(adapter);
 
-        if (Event.eventsList.size() != 0) {
-            String[] esami = new String[examNameList.size()];
-            int[] minuti = new int[examNameList.size()];
-            for (int j = 0; j < examNameList.size(); j++) {
-                int minuto = 0;
-                for (int i = 0; i < Event.eventsList.size(); i++) {
-                    controllo = String.valueOf(Event.eventsList.get(i).getExamName());
-                    if (controllo.equals(examNameList.get(j)))
-                        minuto += 30;
-
-                }
-                minuti[j] = minuto;
-                minutiInteger.add(minuto);
-            }
-
-            for (int j = 0; j < examNameList.size(); j++) {
-
-                for (int i = 0; i < Event.eventsList.size(); i++) {
-                    controllo = String.valueOf(Event.eventsList.get(i).getExamName());
-                    if (controllo.equals(examNameList.get(j)))
-                        esami[j] = controllo;
-                    esamiString.add(controllo);
-                }
-            }
-        }
-
-        for (int i = 0; i < Event.eventsList.size(); i++) {
-            LocalDate localDate = LocalDate.parse(Event.eventsList.get(i).getDateEvent());
-
+        for (Event event : Event.eventsList) {
+            LocalDate localDate = LocalDate.parse(event.getDateEvent());
             if (localDate.getDayOfYear() < Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
                 countDayStudy++;
             }
         }
+        //adapter = new ExamAdapter(getContext(), examNameList);
+        //listView.setAdapter(adapter);
+
 
         hourStudyInt = countDayStudy / 2;
         hourStudy.setText("" + hourStudyInt);
@@ -138,6 +111,8 @@ public class ExamStatFragment extends Fragment {
                 examList.clear();
                 examNameList.clear();
 
+                String controllo;
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Exam exam = snapshot.getValue(Exam.class);
                     if(exam!=null) {
@@ -152,6 +127,34 @@ public class ExamStatFragment extends Fragment {
                 recyclerView.setAdapter(adapter);
                 //Exam.arrayList1 = examNameList;
                 //Exam.listExam = (ArrayList<Exam>) examList;
+
+
+                if (Event.eventsList.size() != 0) {
+                    String[] esami = new String[examNameList.size()];
+                    int[] minuti = new int[examNameList.size()];
+                    for (int j = 0; j < examNameList.size(); j++) {
+                        int minuto = 0;
+                        for (int i = 0; i < Event.eventsList.size(); i++) {
+                            controllo = String.valueOf(Event.eventsList.get(i).getExamName());
+                            if (controllo.equals(examNameList.get(j)))
+                                minuto += 30;
+
+                        }
+                        minuti[j] = minuto;
+                        minutiInteger.add(minuto);
+                    }
+
+                    for (int j = 0; j < examNameList.size(); j++) {
+
+                        for (int i = 0; i < Event.eventsList.size(); i++) {
+                            controllo = String.valueOf(Event.eventsList.get(i).getExamName());
+                            if (controllo.equals(examNameList.get(j)))
+                                esami[j] = controllo;
+                            esamiString.add(controllo);
+                        }
+                    }
+                }
+
             }
 
             @Override
