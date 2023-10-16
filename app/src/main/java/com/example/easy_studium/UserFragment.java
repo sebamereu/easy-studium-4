@@ -24,18 +24,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.ktx.Firebase;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+/*questa classe gestisce il terzo fragment, dove si può visualizzare la lista con tutti gli utenti
+* e aprire la chat con ognuno di essi*/
 public class UserFragment extends Fragment {
 
-    TextView userText, passwordText, modificaPassword;
-    Button logoutButton, chatButton;
-    Persona personaRicevuta;
+    /*inizializzazione variabili*/
+    TextView userText;
+    Button logoutButton;
     FirebaseAuth auth;
     FirebaseUser user;
     UserAdapter userAdapter;
@@ -48,24 +46,28 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        /*gestisce tutto il fragment_user.xml*/
         fragmentUserBinding = FragmentUserBinding.inflate(inflater, container, false);
         View view = inflater.inflate(R.layout.fragment_user,container,false);
 
+        userText=view.findViewById(R.id.confUser);
+        logoutButton=view.findViewById(R.id.logoutButton);
         recyclerView= view.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         personaList= new ArrayList<>();
+
+        /*metodo per estrarre gli users dal database e assegnarli alla personaList*/
         readUsers();
 
-        userText=view.findViewById(R.id.confUser);
-        logoutButton=view.findViewById(R.id.logoutButton);
-        //chatButton=view.findViewById(R.id.chatButton);
-
+        /*assegnamo ad auth l'utente loggato*/
         auth= FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
+
         userText.setText(user.getEmail());
+
+        /*cliccando questo button si effettuerà il logout dell'utente e si ritornerà al LoginActivity*/
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -79,19 +81,25 @@ public class UserFragment extends Fragment {
         return view;
     }
 
+    /*metodo per estrarre gli users dal database e assegnarli alla personaList*/
     private void readUsers() {
+        /*si crea il riferimento per inserire/prendere i dati dal database*/
         DatabaseReference reference=FirebaseDatabase.getInstance().getReference("users");
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                /*puliamo la lista di utenti*/
                 personaList.clear();
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    Persona persona=snapshot.getValue(Persona.class);
+                    /*prendiamo dal database gli elementi Persona che son stati autenticati in precedenza*/                    Persona persona=snapshot.getValue(Persona.class);
+                    /*la lista sarà creata da tutti gli utenti apparte quello loggato*/
                     if(!persona.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
                         personaList.add(persona);
                     }
                 }
+                /*adattiamo la recyclerView usando la personaList*/
+                /*lo userAdapter ci consentirà inoltre di cliccare nel label di un utente e aprire la chatactivity
+                * con quell'utente*/
                 userAdapter=new UserAdapter(getContext(), personaList);
                 recyclerView.setAdapter(userAdapter);
             }

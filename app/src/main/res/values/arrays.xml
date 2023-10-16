@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="planets_array">
+    <string-array name="exams_array">
         <item>Teoria</item>
         <item>Laboratorio</item>
-        <item>Esame</item>
+        <item>Appello Esame</item>
     </string-array>
 </resources>

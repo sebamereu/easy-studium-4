@@ -17,17 +17,15 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/*classe che adatta ad ogni orario presente nel calendario giornaliero */
 public class HourAdapter extends ArrayAdapter<HourEvent>
 {
-    Button deleteEvent;
-
 
     public HourAdapter(@NonNull Context context, List<HourEvent> hourEvents)
     {
         super(context, 0, hourEvents);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
@@ -36,21 +34,18 @@ public class HourAdapter extends ArrayAdapter<HourEvent>
 
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.hour_cell, parent, false);
-        //deleteEvent=convertView.findViewById(R.id.deleteEvent);
 
         setHour(convertView, event.time);
         setEvents(convertView, event.events);
         return convertView;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setHour(View convertView, LocalTime time)
     {
         TextView timeTV = convertView.findViewById(R.id.timeTV);
         timeTV.setText(CalendarUtils.formattedShortTime(time));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setEvents(View convertView, ArrayList<Event> events)
     {
         TextView event1 = convertView.findViewById(R.id.event1);
@@ -77,7 +72,6 @@ public class HourAdapter extends ArrayAdapter<HourEvent>
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setEvent(TextView textView, Event event)
     {
         textView.setText(event.getNameEvent());

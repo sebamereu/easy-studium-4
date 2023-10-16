@@ -38,13 +38,16 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-
+    /*inizializzazione variabili*/
     public EditText passwordText; //static public perchè serve nell'AdminActivity
     EditText userText;
     Button loginButton;
     TextView signinButton;
     ProgressBar progressBar;
     FirebaseAuth mAuth;
+    /*onStart verrà attivata all'inizio del ciclo di vita del LoginActivity
+    * controllerà se l'utente si era già loggato in precedenza e non ha effettuato il logout,
+    * in caso affermativo si passa direttamente al MainActivity*/
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onStart() {
@@ -57,9 +60,12 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    /*gestisce tutta la parte di back-end del file activity_login.xml*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*prende il file activity_login presente nella cartella dei layout*/
         setContentView(R.layout.activity_login);
 
 
@@ -70,10 +76,11 @@ public class LoginActivity extends AppCompatActivity {
         signinButton = findViewById(R.id.signinButton);
         progressBar=findViewById(R.id.progressBarLogin);
 
+        /*inizializza l'utente loggato in quel momento*/
         mAuth = FirebaseAuth.getInstance();
 
 
-        /*se si preme il button "login" porta alla LoginActivity */
+        /*se si preme il button "login" verranno effettuati i controlli per l'accesso*/
         loginButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -83,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                 username = String.valueOf(userText.getText());
                 password = String.valueOf(passwordText.getText());
 
+                /*se l'edit text email sarà vuoto allora ricorderemo all'utente di inserire la mail*/
                 if (TextUtils.isEmpty(username)) {
                     userText.setError("Enter email");
                     Toast.makeText(LoginActivity.this, "Enter email.",
@@ -90,34 +98,41 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
+                /*se l'edit text password sarà vuoto allora ricorderemo all'utente di inserire la mail*/
                 if (TextUtils.isEmpty(password)) {
                     passwordText.setError("Enter password");
                     Toast.makeText(LoginActivity.this, "Enter password.",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
+                /*questo metodo serve per controllare che le credenziali inserite siano corrette
+                * utlizzando il database*/
                 login();
             }
         });
 
+        /*se viene cliccato questo TextView si passerà alla SignupActivity*/
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Write a message to the database
                 startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
     }
 
+    /*questo metodo serve per controllare che le credenziali inserite siano corrette
+     * utlizzando il database*/
     private void login() {
+        /*useremo un metodo presente nella documentazione di FireBase pe rcontrollare che le
+        * credenziali siano corrette*/
         FirebaseAuth
                 .getInstance()
                 .signInWithEmailAndPassword(userText.getText().toString().trim()
                         , passwordText.getText().toString())
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onSuccess(AuthResult authResult) {
+                        /*in caso di successo si passa al MainActivity*/
                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                         finish();
                     }

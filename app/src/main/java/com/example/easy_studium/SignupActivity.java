@@ -38,17 +38,16 @@ import java.util.Calendar;
 
 public class SignupActivity extends AppCompatActivity {
 
+    /*inizializzazione variabili*/
     String username, password, email;
 
     EditText usernameText, emailText, passwordText;
     public Persona persona;
     TextView errorText, clearButton;
-    Button salvaButton, signinButton;
+    Button salvaButton;
     ProgressBar progressBar;
     public static FirebaseDatabase database;
     DatabaseReference reference;
-    int modelvalue = 20;
-    static public String PERSONA_EXTRA = "com.example.LoginAdmin.Persona";
     static public ArrayList<Persona> rubrica = new ArrayList<>();
 
     FirebaseAuth mAuth= FirebaseAuth.getInstance();
@@ -74,6 +73,9 @@ public class SignupActivity extends AppCompatActivity {
 
         /*inizializzazione di una Persona*/
         persona = new Persona();
+
+        /*indica la posizione nel database a cui si farà riferimento quando si creerà un nuovo utente
+        * quindi nella cartella "users"*/
         reference=FirebaseDatabase.getInstance().getReference("users");
 
         /*Button che serve per pulire tutti i campi che son stati compilati*/
@@ -97,26 +99,38 @@ public class SignupActivity extends AppCompatActivity {
                 email=String.valueOf(emailText.getText());
                 password=String.valueOf(passwordText.getText());
 
+                /*se l'edit text username sarà vuoto allora ricorderemo all'utente di inserire l'username*/
                 if(TextUtils.isEmpty(username)){
                     usernameText.setError("inserire username");
                     Toast.makeText(SignupActivity.this, "Enter username",Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                /*se l'edit text email sarà vuoto allora ricorderemo all'utente di inserire la mail*/
                 if(TextUtils.isEmpty(email)){
                     emailText.setError("inserire email");
                     Toast.makeText(SignupActivity.this, "Enter email",Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                /*se l'edit text password sarà vuoto allora ricorderemo all'utente di inserire la password*/
                 if(TextUtils.isEmpty(password)){
                     passwordText.setError("inserire password");
                     Toast.makeText(SignupActivity.this, "Enter password",Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                /*questo metodo userà le credenziali inserite per creare una nuova Persona e autenticarla
+                * inserindela nel database*/
                 signup();
             }
         });
     }
+    /*questo metodo userà le credenziali inserite per creare una nuova Persona e autenticarla
+     * inserindela nel database*/
     private void signup() {
+        /*questo metodo  stato preso dalla documentazione di Firebase per l'autenticazione di un nuovo
+        * utente e l'inserimento dei suoi dati nel database*/
         FirebaseAuth
                 .getInstance()
                 .createUserWithEmailAndPassword(email.trim(), password)
@@ -129,11 +143,15 @@ public class SignupActivity extends AppCompatActivity {
                                 .setDisplayName(username).build();
                         FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
                         firebaseUser.updateProfile(userProfileChangeRequest);
+                        /*verranno prese le credenziali inserite nei vari EditText e verrà creata una
+                        * Persona*/
                         Persona persona= new Persona(FirebaseAuth.getInstance().getCurrentUser().getUid()
                                 , username, email, password);
 
+                        /*questa persona verrà aggiunta nel reference inizializzato in precedenza*/
                         reference.child(FirebaseAuth.getInstance().getUid()).setValue(persona);
-                        startActivity(new Intent(SignupActivity.this,MainActivity.class));
+                        /*si passerà di nuovo al LoginActivity*/
+                        startActivity(new Intent(SignupActivity.this,LoginActivity.class));
                         finish();
                     }
                 });

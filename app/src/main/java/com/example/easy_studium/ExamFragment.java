@@ -1,17 +1,11 @@
 package com.example.easy_studium;
 
-import android.app.AlertDialog;
-import android.app.TimePickerDialog;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,35 +13,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
+/*questa classe serve per aggiungere un nuovo esame*/
 public class ExamFragment extends Fragment {
+
+    /*inizializzazione variabili*/
     private  TextView errorText;
     private EditText examName, examCFU;
     private Button saveExam;
     public static ArrayAdapter<String> adapter;
-    public static ArrayAdapter<Exam> adapterExam;
-
-    public static ArrayList<String> arrayList;
-    public static ArrayList<Exam> arrayListExam;
-
-    List<Exam> examList;
-    ArrayList<String> examNameList;
 
 
     public ExamFragment() {
@@ -60,29 +38,29 @@ public class ExamFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /*gestisce tutto il fragment_exam.xml*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view;
-        // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_exam, container, false);
 
+        /*assegnazione dei vari EditText/TextView/Button presenti nel file .xml*/
         examName=view.findViewById(R.id.examName);
         examCFU=view.findViewById(R.id.examCFU);
         saveExam=view.findViewById(R.id.saveExamAction);
         errorText=view.findViewById(R.id.errorText);
 
-        //readExam();
-        
+        /*cliccato questo button verrà salvato il nuovo esame*/
         saveExam.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 if (checkInput()) {
+                    /*le stringe scritte nei due editText vengono utilizzate per creare un nuovo Exam*/
                     Exam e = new Exam(FirebaseAuth.getInstance().getCurrentUser().getUid(), examName.getText().toString(), examCFU.getText().toString());
                     e.setNameExam(examName.getText().toString());
                     e.setCfu(examCFU.getText().toString());
-
 
                     // Ottieni l'istanza di FirebaseAuth
                     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -105,14 +83,16 @@ public class ExamFragment extends Fragment {
                         // Assegna l'oggetto all'utente nel database
                         reference.push().setValue(exam);
                     }
+                    /*ritorniamo al primo fragment, quello di visualizazzione del calendario giornaliero*/
                     replaceFragment(new DailyCalendarFragment());
                 }
             }
         });
 
-                return view;
+        return view;
     }
 
+    /*controlla che tutti gli editText presenti non siano vuoti e che siano stati compilati correttamente*/
     private boolean checkInput() {
         int errors=0;
         int nCfu;
@@ -135,7 +115,7 @@ public class ExamFragment extends Fragment {
             examCFU.setError("Inserire numero valido");
         }else examCFU.setError(null);
 
-
+        /*in caso di errore verrà visualizzato il motivo dell'errrore*/
         switch (errors){
             case 0:
                 errorText.setVisibility(View.GONE);
@@ -154,6 +134,7 @@ public class ExamFragment extends Fragment {
         return errors==0;
     }
 
+    /*metodo per passare da un fragment all'altro rimanendo nel MainActiivty*/
     void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();

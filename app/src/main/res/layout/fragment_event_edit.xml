@@ -50,7 +50,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:text="Aggiungi esame"
-                android:textColor="@color/rossoapp"
+                android:textColor="@color/celesteapp"
                 android:textSize="18dp"
                 android:textStyle="bold" />
             <Space

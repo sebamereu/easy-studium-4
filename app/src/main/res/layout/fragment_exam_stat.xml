@@ -53,25 +53,8 @@
             android:id="@+id/recycler_exam"
             android:layout_width="match_parent"
             android:layout_height="523dp" />
-        <!--   <ListView
-               android:id="@+id/list"
-               android:layout_width="match_parent"
-               android:layout_height="606dp"
-               android:layout_below="@+id/logoutButton"></ListView> -->
 
-        <!--   <view
-               android:id="@+id/piechart"
-               class="com.example.easy_studium.PieChartView"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content" />
 
-           <com.anychart.AnyChartView
-               android:id="@+id/anyChart"
-               android:layout_width="350dp"
-               android:layout_height="350dp"
-               android:layout_gravity="center">
-
-           </com.anychart.AnyChartView>-->
     </LinearLayout>
 
 </LinearLayout>

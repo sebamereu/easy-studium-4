@@ -2,50 +2,37 @@ package com.example.easy_studium;
 
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class EventEditFragment extends DialogFragment {
 
+    /*inizializzazione variabili*/
     private EditText eventNameET;
     private TextView eventDateTV, errorText, newExamAction;
     private Button saveEventAction, eventTimeTV, eventTimeFinish;
@@ -54,12 +41,8 @@ public class EventEditFragment extends DialogFragment {
     public static Spinner spinner, spinnerToDo;
     private TimePicker eventTimeInizio, eventTimeFine;
     public static int hour, minute;
-    ArrayAdapter<String> adapter1;
-    ArrayList<String> arrayList;
     List<Exam> examList;
     ArrayList<String> examNameList;
-    ListView listView;
-    ArrayAdapter<String> examAdapter;
 
 
     public EventEditFragment() {
@@ -71,13 +54,14 @@ public class EventEditFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    /*gestisce tutto il fragment_event_edit.xml*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.fragment_event_edit, container, false);
 
+        /*assegnazione dei vari EditText/TextView/Button presenti nel file .xml*/
         saveEventAction = view.findViewById(R.id.saveEventAction);
         eventNameET = view.findViewById(R.id.eventNameET);
         eventDateTV = view.findViewById(R.id.eventDateTV);
@@ -88,34 +72,24 @@ public class EventEditFragment extends DialogFragment {
         errorText = view.findViewById(R.id.errorText);
         newExamAction = view.findViewById(R.id.newExamAction);
 
-
+        /*metodo per estrarre gli esami dell'utente loggato dal database e assegnarli a spinner*/
         readExam();
 
         spinner.setVisibility(View.VISIBLE);
         newExamAction.setVisibility(View.VISIBLE);
 
-      /*  if (!(examNameList.size() ==0)) {
-            spinner.setVisibility(View.VISIBLE);
-        }else{
-            newExamAction.setVisibility(View.VISIBLE);
-            spinner.setVisibility(View.GONE);
-
-        }*/
-
-
+        /*viene assegnato allo spinnerToDo tre opzion "Teoria", "Laboratorio" o "Appello esame"*/
         ArrayAdapter<CharSequence> examMoodAdapter = ArrayAdapter.createFromResource(this.getActivity(),
-                R.array.planets_array, android.R.layout.simple_spinner_item);
+                R.array.exams_array, android.R.layout.simple_spinner_item);
         examMoodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinnerToDo.setAdapter(examMoodAdapter);
 
         LocalTime timeNow = LocalTime.now(); // il tuo oggetto LocalTime
         timeNowString = timeNow.toString();
         localDate = CalendarUtils.selectedDate;
         eventDateTV.setText("Date: " + CalendarUtils.formattedDate(CalendarUtils.selectedDate));
-        //eventTimeTV.setText("Time: " + CalendarUtils.formattedTime(time));
 
-
+        /*assegna l'orario di inizio dell'evento*/
         eventTimeTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +123,7 @@ public class EventEditFragment extends DialogFragment {
             }
         });
 
+        /*assegna l'orario di fine dell'evento*/
         eventTimeFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,7 +157,7 @@ public class EventEditFragment extends DialogFragment {
             }
         });
 
-
+        /*si passa al fragment per l'aggiunta di un nuovo esame*/
         newExamAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,16 +165,18 @@ public class EventEditFragment extends DialogFragment {
             }
         });
 
-
+        /*gestisce tutta la parte di salvataggio di un nuovo evento*/
         saveEventAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkInput()) {
-                    //String eventName = eventNameET.getText().toString();
 
+                    /*il nome dell'evento sarà composto dall'opzioni selezionate nei due spinner*/
                     String eventName = (spinner.getSelectedItem().toString()
                             + "-" + spinnerToDo.getSelectedItem().toString());
 
+                    /*per capire quante celle orarie bisogna cambiare nel calendario giornaliero si fa una differenza
+                    * tra orario di inizio e orario di fine*/
                     TimePicker timePickerInizio = eventTimeInizio;
                     TimePicker timePickerFine = eventTimeFine;
                     int hourInizio = timePickerInizio.getHour();
@@ -241,22 +218,18 @@ public class EventEditFragment extends DialogFragment {
 
                     }
 
-
+                    /*la data dell'evento sarà data dal giorno selezionato nel DailyCalendarFragment*/
                     String dateStr = CalendarUtils.selectedDate.toString(); // convert LocalDate to String
-                    //String timeStr = hour + ":" + minute; // convert TimePicker to String
-
-
-                    FirebaseAuth auth = FirebaseAuth.getInstance();
 
                     // Ottieni l'utente attualmente autenticato
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
                     FirebaseUser user = auth.getCurrentUser();
 
-                    // L'utente è autenticato, quindi possiamo procedere con l'assegnazione dell'oggetto
 
                     // Ottieni un riferimento al database
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-                    // Crea un riferimento all'utente nel database
+                    // Crea un riferimento alla cartella "events" nel database
                     DatabaseReference eventReference = database.getReference("events");
 
                     if (user != null) {
@@ -265,6 +238,7 @@ public class EventEditFragment extends DialogFragment {
                         for (int i = 0; i < max; i++) {
 
                             if (i == 0) {
+                                /*controlla che tutti gli elementi presenti nella pagina non siano vuoti*/
                                 if (spinner.getSelectedItem()==null) {
                                     Toast.makeText(getContext(), "Enter exam.",
                                             Toast.LENGTH_SHORT).show();
@@ -291,11 +265,11 @@ public class EventEditFragment extends DialogFragment {
                                         dateStr, spinner.getSelectedItem(), spinnerToDo.getSelectedItem(), timePickString[i]);
 
                                 // L'utente è autenticato, quindi possiamo procedere con l'assegnazione dell'oggetto
-
-
+                                /*l'evento sarò inserito nel database*/
                                 eventReference.push().setValue(events[i]);
 
-
+                            /*dentro l'if sarà creato l'evento con il titolo(per la prima cella oraria)
+                            , tutte le sucessive celle orario non avranno nome, ma saranno comunque eventi */
                             } else {
 
                                 // Crea l'oggetto da assegnare all'utente
@@ -303,54 +277,54 @@ public class EventEditFragment extends DialogFragment {
                                         dateStr, spinner.getSelectedItem(), spinnerToDo.getSelectedItem(), timePickString[i]);
 
                                 // L'utente è autenticato, quindi possiamo procedere con l'assegnazione dell'oggetto
-
                                 eventReference.push().setValue(events[i]);
 
                             }
 
                         }
+                        /*si ritorno al fragment di visualizazzione del calendario giornaliero*/
                         replaceFragment(new DailyCalendarFragment());
 
                     }
                 }
             }
         });
-        // Inflate the layout for this fragment
         return view;
     }
 
+    /*metodo per estrarre gli esami dell'utente loggato dal database e assegnarli a spinner*/
     private void readExam() {
-
+        /*si crea il riferimento per inserire/prendere i dati dal database*/
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("exams");
 
+        /*si crea una lista per inserire gli esami creati in precedenza dall'utente*/
         examList = new ArrayList<>();
         examNameList = new ArrayList<>();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                /*puliamo la lista di esami*/
                 examList.clear();
                 examNameList.clear();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Exam exam = snapshot.getValue(Exam.class);
+                    /*prendiamo dal database gli elementi Exam che son stati creati dall'utente
+                     * loggato*/
                     if (exam != null) {
                         if (exam.getExamId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            /*inseriamoli nelle liste*/
                             examList.add(exam);
                             examNameList.add(exam.getNameExam());
                         }
                     }
 
                 }
+                /*adattiamo lo spinner in base agli esami inseriti dall'utente in precedenza*/
                 ArrayAdapter<String> examAdapter = new ArrayAdapter<>(EventEditFragment.spinner.getContext(),
                         android.R.layout.simple_spinner_item, examNameList);
                 examAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                //examAdapter= new ArrayAdapter<>(getContext(),examNameList);
                 spinner.setAdapter(examAdapter);
-
-                //Exam.arrayList1 = examNameList;
-                //Exam.listExam = (ArrayList<Exam>) examList;
             }
 
             @Override
@@ -360,15 +334,9 @@ public class EventEditFragment extends DialogFragment {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void signevent(Event event) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("events").push().setValue(event);
-    }
-
+/*segnala se ci sono errori nell'inserimento degli input per la creazione di un evento*/
     private boolean checkInput() {
         int errors = 0;
-
 
         if (eventTimeInizio == null) {
             errors++;
@@ -399,7 +367,7 @@ public class EventEditFragment extends DialogFragment {
         return errors == 0;
     }
 
-
+    /*metodo per passare da un fragment all'altro rimanendo nel MainActiivty*/
     void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

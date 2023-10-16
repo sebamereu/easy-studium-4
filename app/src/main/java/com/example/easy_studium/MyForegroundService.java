@@ -31,7 +31,7 @@ public class MyForegroundService extends Service {
         String input = intent.getStringExtra("inputExtra");
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, 0);
+                0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Example Service")
@@ -40,7 +40,7 @@ public class MyForegroundService extends Service {
                 .setContentIntent(pendingIntent)
                 .build();
 
-        startForeground(0, notification);
+        startForeground(1, notification);
 
 
         //do heavy work on a background thread
