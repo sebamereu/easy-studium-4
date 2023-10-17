@@ -11,13 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -31,54 +24,6 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder>{
         this.context = context;
         this.examNameList = examNameList;
     }
-/*
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if (convertView == null) {
-            Button editExam;
-            LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.list_row, null);
-            TextView name = convertView.findViewById(R.id.name);
-            TextView oreTeoria = convertView.findViewById(R.id.hourTeoria);
-            TextView oreLaboratorio = convertView.findViewById(R.id.hourLaboratorio);
-            examNameList=new ArrayList<>();
-            readExam();
-            String esame;
-            String controllo;
-            int ore = 0;
-            int oreTeoriaInt = 0;
-            int oreLaboratorioInt = 0;
-
-            for (int i = 0; i < Event.eventsList.size(); i++) {
-                controllo = String.valueOf(Event.eventsList.get(i).getExamName());
-                if (controllo.equals(examNameList.get(position))) {
-                    ore++;
-                    if (Event.eventsList.get(i).getExamMode().equals("Teoria")) oreTeoriaInt++;
-                    if (Event.eventsList.get(i).getExamMode().equals("Laboratorio"))
-                        oreLaboratorioInt++;
-
-                }
-            }
-            ore = ore / 2;
-            oreTeoriaInt = oreTeoriaInt / 2;
-            oreLaboratorioInt = oreLaboratorioInt / 2;
-            esame = ("" + examNameList.get(position) + ": " + ore + " ore.");
-            name.setText(esame);
-
-            esame = ("Teoria: " + oreTeoriaInt + " ore.");
-            oreTeoria.setText(esame);
-
-            esame = ("Laboratorio: " + oreLaboratorioInt + " ore.");
-            oreLaboratorio.setText(esame);
-
-
-        }
-        return convertView;
-    }
-
- */
 
     @NonNull
     @Override
@@ -87,7 +32,6 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder>{
         return new ExamAdapter.ViewHolder(view);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ExamAdapter.ViewHolder holder, int position) {
 
@@ -129,7 +73,6 @@ public class ExamAdapter extends RecyclerView.Adapter<ExamAdapter.ViewHolder>{
         oreString =""+ore;
         oreTeoriaString =""+oreTeoriaInt;
         oreLabString =""+oreLaboratorioInt;
-        //holder.name.setText(esame);
 
         holder.oreTot.setText(oreString);
         holder.oreTeoria.setText(oreTeoriaString);
